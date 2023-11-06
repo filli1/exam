@@ -33,6 +33,25 @@ exports.getUser = (id) => {
                 resolve(row);
             }
         });
+
+        //db.close();
+    });
+}
+
+exports.getUserByEmail = (email) => {
+    return new Promise((resolve, reject) => {
+        const db = new sqlite3.Database(dbPath);
+
+        db.get(`SELECT * FROM users WHERE email=?`, [email], (err, row) => {
+            db.close(); // Close the database connection here
+
+            if (err) {
+                reject(err);
+            } else {
+                resolve(row);
+            }
+        });
+
     });
 }
 
@@ -94,8 +113,9 @@ exports.editUser = (req, res) => {
             return console.error(err.message);
         }
         res.send(`User updated successfully with id ${id}`);
-        db.close();
     });
+
+    db.close();
 }
 
 exports.deleteUser = async (req, res) => {
@@ -115,6 +135,7 @@ exports.deleteUser = async (req, res) => {
                         return console.error(err.message);
                     }
                 });
+                db.close();
                 res.status(200).send(`User deleted with id ${id}`);
             } else {
                 res.status(403).send("Incorrect password")
@@ -127,4 +148,31 @@ exports.deleteUser = async (req, res) => {
         res.status(500).send("Error deleting user")
     }
 
+}
+
+exports.login = async (req, res) => {
+    console.log("Logging in...")
+    const email = req.body.email;
+    console.log("Given email: " + email)
+    const password = req.body.password;
+    console.log("Given password: " + password)
+
+    try {
+        let user = await exports.getUserByEmail(email);
+
+        if(user){
+            if (user.password === password){
+                res.status(200).cookie("userAuth", user.id, {
+                    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+                  }).send(`User logged in with id ${user.id}`);
+            } else {
+                res.status(403).send("Incorrect password")
+            }
+        } else {
+            res.status(404).send("User not found")
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).send("Error logging in")
+    }
 }
