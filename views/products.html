@@ -1,25 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
     <title>Joe & the Juice - eksamensprojekt</title>
-</head>
-<body>
-<!-- HOVEDMENU -->
-<nav>
-<a href="">Home</a> 
-<a href="products.html">Products</a> 
-<a href="order.html">Order</a> 
-<a href="login.html">Login</a> 
-<a href="account.html">My account</a> 
-</nav>
-<section id="product-overview">
-<div id="product1" class="product"></div>
-<div id="product2" class="product"></div>
-<div id="product3" class="product"></div>
-<div id="product4" class="product"></div>
-</section>
-</body>
+  </head>
+  <body>
+    <!-- HOVEDMENU -->
+    <nav>
+      <img
+        src="/views/img/logo.png"
+        id="header-logo"
+        alt="Joe & the juice logo"
+      />
+      <a href="/views/index.html">Home</a>
+      <a href="/views/products.html">Products</a>
+      <a href="/views/order.html">Order</a>
+      <a id="open-popup" class="align-right" href="/views/login.html">Login</a>
+      <a class="align-right" href="/views/account.html">My account</a>
+    </nav>
+    <section class="top-banner">
+      <h1>Products</h1>
+    </section>
+    <!-- PRODUKT OVERSIGT -->
+    <section id="product-overview">
+      <div id="product1" class="product">
+        <img src="/views/img/product1.jpg" alt="Green vegan bowl" />
+        <div class="product-desc">
+          <h1>Green vegan bowl</h1>
+          <p>
+            Avocado, Broccoli, Cranberry, Edamame, Kale, Lemon, Pickled Red
+            Onion, Pumpkin Seeds, Spinach, Vegan Pest
+          </p>
+          <p>69,00kr</p>
+        </div>
+      </div>
+      <div id="product2" class="product">
+        <img src="/views/img/Tunacado-x1.jpg" alt="Tunacado" />
+        <div class="product-desc">
+          <h1>Tunacado</h1>
+          <p>Avocado, Joe's Classic Bread, Tomato, Tuna, Vegan Pesto</p>
+          <p>75,00kr</p>
+        </div>
+      </div>
+      <div id="product3" class="product">
+        <img src="/views/img/Power Shake-x1.jpg" alt="Power Shake" />
+        <div class="product-desc">
+          <h1>Power Shake</h1>
+          <p>Vanilla Milk, Strawberries, Banana, Iceo</p>
+          <p>59,00kr</p>
+        </div>
+      </div>
+    </section>
+    <!-- The login popup -->
+<div id="login-popup" class="popup">
+    <div class="popup-content">
+        <span class="close" id="close-popup">&times;</span>
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" />
+            <label for="password">Password</label>
+            <input type="password" id="password" />
+            <input type="submit" value="Submit" />
+            <p class="pink-text">Create user</p>
+        </form>
+        </div>
+    <script src="/views/popup.js"></script>
+  </body>
 </html>

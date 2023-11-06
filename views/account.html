@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
     <title>Joe & the Juice - eksamensprojekt</title>
-</head>
-<body>
-<!-- HOVEDMENU -->
-<nav>
-<a href="">Home</a> 
-<a href="products.html">Products</a> 
-<a href="order.html">Order</a> 
-<a href="login.html">Login</a> 
-<a href="account.html">My account</a> 
-</nav>
-</body>
+  </head>
+  <body>
+    <!-- HOVEDMENU -->
+    <nav>
+      <img
+        src="/views/img/logo.png"
+        id="header-logo"
+        alt="Joe & the juice logo"
+      />
+      <a href="/views/index.html">Home</a>
+      <a href="/views/products.html">Products</a>
+      <a href="/views/order.html">Order</a>
+      <a id="open-popup" class="align-right" href="/views/login.html">Login</a>
+      <a class="align-right" href="/views/account.html">My account</a>
+    </nav>
+    <!-- The login popup -->
+<div id="login-popup" class="popup">
+    <div class="popup-content">
+        <span class="close" id="close-popup">&times;</span>
+        <h2>Login</h2>
+        <form id="login-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" />
+            <label for="password">Password</label>
+            <input type="password" id="password" />
+            <input type="submit" value="Submit" />
+            <p class="pink-text">Create user</p>
+        </form>
+        </div>
+    <script src="/views/popup.js"></script>
+  </body>
 </html>
