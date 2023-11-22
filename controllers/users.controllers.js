@@ -2,14 +2,19 @@ const sqlite3 = require('sqlite3').verbose();
 const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
+const objectHash = require('object-hash'); //Used to hash passwords https://www.npmjs.com/package/object-hash
 
+function hash(string){
+    const hashedstring = objectHash(string, {algorithm: 'RSA-SHA512'})
+    return hashedstring
+}
 
 exports.createUser = (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
     const { name, email, password } = req.body;
 
-    db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`, [name, email, password], function(err) {
+    db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`, [name, email, hash(password)], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -75,7 +80,7 @@ exports.editUser = (req, res) => {
     const userInfo = {
         name: req.body.name,
         email: req.body.email,
-        password: req.body.password
+        password: hash(req.body.password)
     }
 
     const id = req.params.id;
@@ -121,7 +126,7 @@ exports.editUser = (req, res) => {
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
 
-    const password = req.body.password;
+    const password = hash(req.body.password);
     console.log("Given password: " + password)
 
     try {
@@ -154,8 +159,8 @@ exports.login = async (req, res) => {
     console.log("Logging in...")
     const email = req.body.email;
     console.log("Given email: " + email)
-    const password = req.body.password;
-    console.log("Given password: " + password)
+    const password = hash(req.body.password);
+    console.log("Input password: " + password)
 
     try {
         let user = await exports.getUserByEmail(email);
@@ -163,7 +168,7 @@ exports.login = async (req, res) => {
         if(user){
             if (user.password === password){
                 res.status(200).cookie("userAuth", user.id, {
-                    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+                    maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
                   }).send(`User logged in with id ${user.id}`);
             } else {
                 res.status(403).send("Incorrect password")
