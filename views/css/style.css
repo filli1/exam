@@ -7,7 +7,7 @@ body{
     background-color: #f8f8f6;
 }
 
-body.frontpage{
+body#frontpage{
   background-color: rgba(37, 40, 43, 1);
 }
 
@@ -49,6 +49,18 @@ button{
     padding: 20px 20px;
     cursor:pointer
     
+}
+
+.pink-btn{
+width: 200px;
+border: none;
+background-color: rgba(247, 193, 217, 1); 
+font-weight: 700;
+padding: 15px 0px;
+}
+
+.pink-btn:hover{
+  background-color: rgb(213, 156, 182); 
 }
 
 /*Home page*/
@@ -115,6 +127,53 @@ button{
     text-align: center;
     font-size: 20px;
     text-transform: uppercase;
+  }
+
+
+
+  /*Products on frontpage*/
+  #frontpage-products{
+    margin: 50px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+#frontpage-products h1{
+  text-align: center;
+  color:white
+
+}
+
+.product-desc h1{
+  color:black !important;
+  text-align: left !important;
+}
+
+.product-frontpage{
+  background:white;
+  display: flex;
+  box-shadow: 0 7px 14px 0 rgba(0, 0, 0, 0.12);
+  padding: 20px;
+  gap: 20px;
+  max-width: 400px;
+  align-items: center;
+  color: black;
+}
+
+.product-frontpage img{
+  width: auto;
+  height: 150px;
+}
+
+  #frontpage-productview{
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+    margin-top: 30px;
+  
   }
 
   /*Product page styling*/
@@ -270,4 +329,9 @@ text-align: center;
 }
 p.pink-text:hover{
    color: rgb(149, 93, 118);
+  }
+
+  /*My account page*/
+  #account-page{
+    background-color: #f8f8f6;
   }
