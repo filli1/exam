@@ -65,7 +65,7 @@ padding: 15px 0px;
 
 /*Home page*/
 #home {
-    background-image: url('/views/img/background-img.jpg');
+    background-image: url('../img/background-img.jpg');
     background-position: center center;
     padding: 30px;
     display: flex;

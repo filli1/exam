@@ -12,9 +12,9 @@ function hash(string){
 exports.createUser = (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
-    const { name, email, password } = req.body;
+    const { name, email, password, phone } = req.body;
 
-    db.run(`INSERT INTO users (name, email, password) VALUES (?, ?, ?)`, [name, email, hash(password)], function(err) {
+    db.run(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hash(password), phone], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -80,7 +80,8 @@ exports.editUser = (req, res) => {
     const userInfo = {
         name: req.body.name,
         email: req.body.email,
-        password: hash(req.body.password)
+        password: hash(req.body.password),
+        phone: req.body.phone
     }
 
     const id = req.params.id;
@@ -101,6 +102,11 @@ exports.editUser = (req, res) => {
     if (userInfo.password !== undefined) {
         updateFields.push('password = ?');
         values.push(userInfo.password);
+    }
+
+    if (userInfo.phone !== undefined) {
+        updateFields.push('phone = ?');
+        values.push(userInfo.phone);
     }
 
     if (updateFields.length === 0) {
