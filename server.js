@@ -18,3 +18,7 @@ var server = app.listen(port, function(error){
 //Require Routes
 const users = require('./routes/users.routes');
 app.use('/users', users);
+const products = require('./routes/products.routes');
+app.use('/products', products);
+const orders = require('./routes/orders.routes');
+app.use('/orders', orders);
