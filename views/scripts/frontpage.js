@@ -23,6 +23,7 @@ function addProductElement(product) {
             <h1>${product.name}</h1>
             <p>Joe's Classic Bread, Vegan Pesto, Avocado, Chicken, Tomato</p>
             <p>${product.price.toFixed(2)} kr.</p>
+            <button class="add-to-cart-btn" onclick="addToCartFunction()">Add to Cart</button>
         </div>
     `;
 

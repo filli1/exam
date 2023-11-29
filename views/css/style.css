@@ -335,3 +335,19 @@ p.pink-text:hover{
   #account-page{
     background-color: #f8f8f6;
   }
+
+  .add-to-cart-btn {
+    background-color: rgba(247, 193, 217, 1); /* Pink background */
+    color: black; /* Black text */
+    padding: 10px 15px; /* Padding around the text */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Cursor changes to pointer on hover */
+    font-weight: 700; /* Bold text */
+    text-transform: uppercase; /* Uppercase text */
+    margin-top: 10px; /* Space above the button */
+}
+
+.add-to-cart-btn:hover {
+    background-color: rgb(213, 156, 182); /* Darker pink on hover */
+}
