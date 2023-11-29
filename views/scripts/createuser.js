@@ -134,6 +134,9 @@ function createUser() {
 
 
 
+function showAlert(message) {
+    alert(message);
+}
 
 function handleFetchResult(result) {
     try {
