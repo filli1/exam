@@ -6,7 +6,7 @@
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <title>Joe & the Juice - eksamensprojekt</title>
   </head>
-  <body>
+  <body id="createuserbody">
     <!-- HOVEDMENU -->
     <nav>
       <img src="../img/logo.png" id="header-logo" alt="Joe & the juice logo" />
@@ -24,15 +24,23 @@
       <h1>Create a new account</h1>
       <form>
         <label for="email">E-mail</label>
-        <input type="text" id="create-email" />
+        <input type="text" id="create-email"/>
         <label for="name">Name</label>
         <input type="text" id="create-name" />
         <label for="phone">Phone number</label>
-        <input type="text" id="create-phone" />
+        <input type="text" id="create-phone" placeholder="+45xxxxxxxx"/>
         <label for="password">Password</label>
         <input type="password" id="create-password" />
         <label for="password">Confirm password</label>
         <input type="password" id="create-password-confirm" />
+        <div id="password-requirements">
+          <p id="length-check">Must be longer than 8 characters <span id="length-icon"></span></p>
+          <p id="uppercase-check">Must contain an uppercase letter <span id="uppercase-icon"></span></p>
+          <p id="lowercase-check">Must contain a lowercase letter <span id="lowercase-icon"></span></p>
+          <p id="number-check">Must contain a number <span id="number-icon"></span></p>
+          <p id="confirmation-check">Confirm password <span id="confirm-icon"></span></p>
+
+        </div>
       </form>
       <button id="create-user-btn">Create user</button>
     </section>

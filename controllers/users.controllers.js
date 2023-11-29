@@ -4,7 +4,7 @@ const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
 const objectHash = require('object-hash'); //Used to hash passwords https://www.npmjs.com/package/object-hash
 
-function hash(string){
+function hashPassword(string){
     const hashedstring = objectHash(string, {algorithm: 'RSA-SHA512'})
     return hashedstring
 }
@@ -14,13 +14,14 @@ exports.createUser = (req, res) => {
 
     const { name, email, password, phone } = req.body;
 
-    db.run(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hash(password), phone], function(err) {
+    db.run(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hashPassword(password), phone], function(err) {
         if (err) {
             db.close(); // Close the database connection in case of an error
             return res.status(500).send(err.message);
         }
 
         console.log(`A user has been inserted with id ${this.lastID}`);
+        console.log(req.body)
         res.send(`User created successfully with id ${this.lastID}`);
         db.close(); // Close the database connection after successful insertion
     });
@@ -81,7 +82,7 @@ exports.editUser = (req, res) => {
     const userInfo = {
         name: req.body.name,
         email: req.body.email,
-        password: hash(req.body.password),
+        password: hashPassword(req.body.password),
         phone: req.body.phone
     }
 
@@ -133,7 +134,7 @@ exports.editUser = (req, res) => {
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
 
-    const password = hash(req.body.password);
+    const password = hashPassword(req.body.password);
     console.log("Given password: " + password)
 
     try {
@@ -166,7 +167,7 @@ exports.login = async (req, res) => {
     console.log("Logging in...")
     const email = req.body.email;
     console.log("Given email: " + email)
-    const password = hash(req.body.password);
+    const password = hashPassword(req.body.password);
     console.log("Input password: " + password)
 
     try {
