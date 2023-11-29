@@ -149,7 +149,7 @@ exports.deleteUser = async (req, res) => {
                 db.close();
                 res.status(200).send(`User deleted with id ${id}`);
             } else {
-                res.status(403).send("Incorrect password")
+                res.status(401).send("Incorrect password")
             }
         } else {
             res.status(404).send("User not found")
@@ -177,7 +177,7 @@ exports.login = async (req, res) => {
                     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
                   }).send(`User logged in with id ${user.id}`);
             } else {
-                res.status(403).send("Incorrect password")
+                res.status(401).send("Incorrect password")
             }
         } else {
             res.status(404).send("User not found")
