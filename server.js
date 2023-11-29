@@ -11,6 +11,17 @@ app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
 })
 
+//Set pages
+app.get('/account', (req, res) => {
+    res.sendFile(__dirname + '/views/account.html');
+})
+app.get('/products', (req, res) => {
+    res.sendFile(__dirname + '/views/products.html');
+})
+app.get('/order', (req, res) => {
+    res.sendFile(__dirname + '/views/order.html');
+})
+
 var server = app.listen(port, function(error){
     if (error) throw error;
     console.log("Express server listening on port, ", port)
