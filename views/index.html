@@ -7,21 +7,21 @@
     <title>Joe & the Juice - eksamensprojekt</title>
   </head>
   <script src="/scripts/frontpage.js"></script>
-  <script src="/scripts/cart.js"></script>
+  <script src="/scripts/addToCart.js"></script>
   <body id="frontpage">
     <!-- HOVEDMENU -->
     <nav>
-      <img
-        src="../img/logo.png"
-        id="header-logo"
-        alt="Joe & the juice logo"
-      />
+      <img src="../img/logo.png" id="header-logo" alt="Joe & the juice logo" />
       <a href="../">Home</a>
       <a href="../products">Products</a>
       <a href="../order">Order</a>
       <a id="open-popup" class="align-right" href="../login.html">Login</a>
       <a class="align-right" href="../account">My account</a>
-    </nav>
+      <a id="cart-button" class="align-right" href="/cart">
+        Cart
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
+  </nav>
     <!-- INDHOLD PÅ FORSIDE -->
     <div class="overlay">
       <section id="home">
@@ -80,6 +80,6 @@
           <p class="pink-text">Create user</p>
       </form>
       </div>
-    <script src="../popup.js"></script>
+    <script src="/scripts/popup.js"></script>
   </body>
 </html>

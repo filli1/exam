@@ -16,23 +16,35 @@ function addProductElement(product) {
     newDiv.id = `product${product.id}`;
     newDiv.className = "product-frontpage";
 
-    // Create the inner HTML for the new div
+    // Create the inner HTML for the new div (excluding the button)
     var innerHTML = `
         <img src="${product.image}" alt="${product.name}" />
         <div class="product-desc">
             <h1>${product.name}</h1>
             <p>Joe's Classic Bread, Vegan Pesto, Avocado, Chicken, Tomato</p>
             <p>${product.price.toFixed(2)} kr.</p>
-            <button class="add-to-cart-btn" onclick="addToCartFunction()">Add to Cart</button>
         </div>
     `;
 
     // Set the inner HTML of the new div
     newDiv.innerHTML = innerHTML;
 
+    // Create the button element
+    var button = document.createElement("button");
+    button.className = "add-to-cart-btn";
+    button.textContent = "Add to Cart";
+    
+    // Attach an event listener to the button
+    button.addEventListener("click", function() {
+        addToCartFunction(product);
+    });
+
+    // Append the button to the new div
+    newDiv.querySelector('.product-desc').appendChild(button);
+
     // Append the new div to the div with id 'frontpage-productview'
     var frontPageProductView = document.getElementById("frontpage-productview");
-    if(frontPageProductView) {
+    if (frontPageProductView) {
         frontPageProductView.appendChild(newDiv);
     } else {
         console.error("Element with id 'frontpage-productview' not found.");

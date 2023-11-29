@@ -6,6 +6,9 @@
     <link type="text/css" rel="stylesheet" href="css/style.css" />
     <title>Joe & the Juice - eksamensprojekt</title>
   </head>
+  <script src="/scripts/products.js"></script>
+  <script src="/scripts/addToCart.js"></script>
+  <script src="/scripts/cart.js"></script>
   <body>
     <!-- HOVEDMENU -->
     <nav>
@@ -15,31 +18,20 @@
       <a href="../order">Order</a>
       <a id="open-popup" class="align-right" href="../login.html">Login</a>
       <a class="align-right" href="../account">My account</a>
-      <button id="cart-button" class="align-right">
-          Cart
-          <span id="cart-count" class="cart-count">0</span>
-      </button>
+      <a id="cart-button" class="align-right" href="/cart">
+        Cart
+        <span id="cart-count" class="cart-count">0</span>
+      </a>
   </nav>
-    <section id="create-user">
-      <h1>Create a new account</h1>
-      <form>
-        <label for="email">E-mail</label>
-        <input type="text" id="create-email" />
-        <label for="name">Name</label>
-        <input type="text" id="create-name" />
-        <label for="phone">Phone number</label>
-        <input type="text" id="create-phone" />
-        <label for="password">Password</label>
-        <input type="password" id="create-password" />
-        <label for="password">Confirm password</label>
-        <input type="password" id="create-password-confirm" />
-      </form>
-      <button id="create-user-btn">Create user</button>
+    <section class="top-banner">
+      <h1>Cart</h1>
     </section>
-
-
+    <!-- KURV OVERSIGT -->
+    <section id="cart-overview">
+      
+    </section>
     <!-- The login popup -->
-<!-- <div id="login-popup" class="popup">
+<div id="login-popup" class="popup">
     <div class="popup-content">
         <span class="close" id="close-popup">&times;</span>
         <h2>Login</h2>
@@ -53,7 +45,5 @@
         </form>
         </div>
     <script src="../popup.js"></script>
-      -->
-    <script src ="/scripts/createuser.js"> </script>
   </body>
 </html>

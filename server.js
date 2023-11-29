@@ -21,6 +21,9 @@ app.get('/products', (req, res) => {
 app.get('/order', (req, res) => {
     res.sendFile(__dirname + '/views/order.html');
 })
+app.get('/cart', (req, res) => {
+    res.sendFile(__dirname + '/views/cart.html');
+})
 
 var server = app.listen(port, function(error){
     if (error) throw error;

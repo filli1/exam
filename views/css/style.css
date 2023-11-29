@@ -41,7 +41,7 @@ img#header-logo {
 
 .align-right{
 position: relative;
-left: 60%;
+left: 55%;
 }
 /* Button */
 button{
@@ -350,4 +350,47 @@ p.pink-text:hover{
 
 .add-to-cart-btn:hover {
     background-color: rgb(213, 156, 182); /* Darker pink on hover */
+}
+
+#cart-button {
+  position: relative;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 15px;
+}
+
+#cart-button img {
+  height: 30px; /* Adjust as per your design */
+  width: auto;
+  text-decoration: none; /* Remove underline from links */
+  display: inline-block; /* To allow padding and margins */
+}
+
+.cart-count {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%); /* Adjust the dot to be in the bottom right corner */
+  background-color: red;
+  border-radius: 50%;
+  color: white;
+  font-size: 0.8em;
+  padding: 2px 6px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f2f2f2;
 }
