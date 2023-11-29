@@ -14,47 +14,47 @@ function checkPassword() {
     // Check password length
     if (password.length >= 8) {
       lengthIcon.innerHTML = '✓'; // Checkmark if length requirement met
-      lengthIcon.style.color = 'green';
+      lengthIcon.style.color = 'lightgreen';
     } else {
       lengthIcon.innerHTML = '✗'; // "X" if length requirement not met
-      lengthIcon.style.color = 'red';
+      lengthIcon.style.color = 'lightcoral';
     }
   
    
     // Check for password match 
     if (password !== confirmPassword || (password === '' && confirmPassword === '')) {
         confirmIcon.innerHTML = '✗'; // "X" if passwords don't match
-        confirmIcon.style.color = 'red';
+        confirmIcon.style.color = 'lightcoral';
     } else {
         confirmIcon.innerHTML = '✓'; // Checkmark if passwords match
-        confirmIcon.style.color = 'green';
+        confirmIcon.style.color = 'lightgreen';
     }
 
     // Check for uppercase letter
     if (/[A-Z]/.test(password)) {
         uppercaseIcon.innerHTML = '✓'; // Checkmark if uppercase requirement met
-        uppercaseIcon.style.color = 'green';
+        uppercaseIcon.style.color = 'lightgreen';
     } else {
         uppercaseIcon.innerHTML = '✗'; // "X" if uppercase requirement not met
-        uppercaseIcon.style.color = 'red';
+        uppercaseIcon.style.color = 'lightcoral';
     }
 
     // Check for lowercase letter
     if (/[a-z]/.test(password)) {
         lowercaseIcon.innerHTML = '✓'; // Checkmark if lowercase requirement met
-        lowercaseIcon.style.color = 'green';
+        lowercaseIcon.style.color = 'lightgreen';
     } else {
         lowercaseIcon.innerHTML = '✗'; // "X" if lowercase requirement not met
-        lowercaseIcon.style.color = 'red';
+        lowercaseIcon.style.color = 'lightcoral';
     }
 
     // Check for number
     if (/[0-9]/.test(password)) {
         numberIcon.innerHTML = '✓'; // Checkmark if number requirement met
-        numberIcon.style.color = 'green';
+        numberIcon.style.color = 'lightgreen';
     } else {
         numberIcon.innerHTML = '✗'; // "X" if number requirement not met
-        numberIcon.style.color = 'red';
+        numberIcon.style.color = 'lightcoral';
     }
     }
   

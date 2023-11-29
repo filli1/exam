@@ -404,38 +404,75 @@ th {
   font-size: 16px;
 
 }
-#create-user {
-  max-width: 300px;
-  padding: 20px;
-  margin: 0 auto; 
-}
 
-#password-requirements {
-  font-size: 13px;
-  font-style: italic;
-  border-radius: 10px;
-  border: 3px solid black;
-  padding-left: 5px;
-}
 #create-user{
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
-  background-color: rgba(247, 193, 217, 1);
+  margin-top: 30px;
+  background-color: #fff0f7;
   border-radius: 10px;
-  padding: 20px;
+  padding: 5px;
   width: 100%;
+  align-items: center;
+  max-width: 400px;
+  padding: 20px;
+  margin-top: 50px;
+  margin-left: 50px;
 }
+  
+
 #createuserbody {
-  background-image: url('../img/background-img.jpg');
+  background-image: url('../img/bagr.jpeg');
   background-position: center center;
 }
 
-#create-user input{
-  width: 90%;
-  padding: 10px;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
+#create-user label{
+  font-weight: 300;
   font-size: 16px;
+  margin-bottom: 1px;
+  margin-top: 7px;
+}
+#create-user input{
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 1px;
+}
+
+#create-user-btn{
+  background-color: rgba(247, 193, 217, 1); /* Pink background */
+  color: black; /* Black text */
+  padding: 10px 15px; /* Padding around the text */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Cursor changes to pointer on hover */
+  margin-top: 10px; /* Space above the button */
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+#create-user-btn:hover {
+  background-color: rgb(213, 156, 182); /* Darker pink on hover */
+}
+
+:placeholder-shown {
+  font-style: italic;
+}
+
+#create-user h1{
+  font-weight: 400;
+}
+
+#password-requirements {
+  padding-left: 5px;
+  margin-top: 1px;
+}
+
+#create-user p{
+  font-weight: 300;
+  font-size: 12px;
+  font-style: italic;
+  margin-bottom: 1px;
+  margin-top: 2px;
 }
