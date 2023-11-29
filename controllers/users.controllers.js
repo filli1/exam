@@ -16,14 +16,15 @@ exports.createUser = (req, res) => {
 
     db.run(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hash(password), phone], function(err) {
         if (err) {
-            return console.error(err.message);
+            db.close(); // Close the database connection in case of an error
+            return res.status(500).send(err.message);
         }
+
         console.log(`A user has been inserted with id ${this.lastID}`);
         res.send(`User created successfully with id ${this.lastID}`);
+        db.close(); // Close the database connection after successful insertion
     });
-
-    db.close();
-}
+};
 
 exports.getUser = (id) => {
     return new Promise((resolve, reject) => {
