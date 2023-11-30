@@ -1,5 +1,28 @@
 const submitbtn = document.getElementById('create-user-btn');
 
+//function to check if email is already in use, will be used later. If the email already exists, the user will be notified and the function will return false. If the email does not exist, the function will return true.
+async function checkEmail(email) {
+    try {
+        const response = await fetch('/users/check', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            return data.exists; // Directly return the existence check
+        } else {
+            throw new Error(response.statusText);
+        }
+    } catch (error) {
+        console.error(error);
+        return null; // Return null in case of an error
+    }
+}
+
+
 // Function to check password requirements
 function checkPassword() {
     const password = document.getElementById('create-password').value;
@@ -9,7 +32,9 @@ function checkPassword() {
     const uppercaseIcon = document.getElementById('uppercase-icon');
     const lowercaseIcon = document.getElementById('lowercase-icon');
     const numberIcon = document.getElementById('number-icon');
-
+    const name = document.getElementById('create-name').value;
+    const email = document.getElementById('create-email').value;
+    
   
     // Check password length
     if (password.length >= 8) {
@@ -69,68 +94,122 @@ function checkPassword() {
   // Initialize the requirement check
   checkPassword();
 
-function createUser() {
-    const name = document.getElementById('create-name').value;
-    const password = document.getElementById('create-password').value;
-    const email = document.getElementById('create-email').value;
-    const phone = document.getElementById('create-phone').value;
-    const confirmPassword = document.getElementById('create-password-confirm').value;
+    async function createUser() {
+        const name = document.getElementById('create-name').value;
+        const password = document.getElementById('create-password').value;
+        const email = document.getElementById('create-email').value;
+        const phone = document.getElementById('create-phone').value;
+        const confirmPassword = document.getElementById('create-password-confirm').value;
 
-    // Check for empty fields
-    if (name === '' || password === '' || email === '' || phone === '' || confirmPassword === '') {
-        showAlert("Please fill out all fields");
-        return;
+        const emailExists = await checkEmail(email);
+        if (emailExists === 1) {
+            showAlert("Email already in use");
+            return;
+        } else if (emailExists === null) {
+            showAlert("Error checking email. Please try again.");
+            return;
+        }
+
+
+        // Check if email is valid
+        if (!email.includes('@') || !email.includes('.')) {
+            showAlert("Please enter a valid email");
+            return;
+        }
+    
+        // Check if phone number is valid (only numbers)
+        if (!/^\+?[0-9]+$/.test(phone)) {
+            showAlert("Please enter a valid phone number");
+            return;
+        }
+    
+        // Check if phone number includes country code
+        if (!phone.includes('+')) {
+            showAlert("Please include country code in phone number");
+            return;
+        }
+    
+        //Check if phone number is at least 8 digits
+        if (phone.length < 8) {
+            showAlert("Please enter a valid phone number");
+            return;
+        }
+    
+        //Check if phone number is at most 15 digits
+        if (phone.length > 15) {
+            showAlert("Please enter a valid phone number");
+            return;
+        }
+    
+
+        // Check for empty fields
+        if (name === '' || password === '' || email === '' || phone === '' || confirmPassword === '') {
+            showAlert("Please fill out all fields");
+            return;
+        }
+
+        // Check password requirements
+        if (password.length < 8) {
+            showAlert("Password must be at least 8 characters");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showAlert("Passwords do not match");
+            return;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            showAlert("Password must contain at least one uppercase letter");
+            return;
+        }
+
+        if (!/[a-z]/.test(password)) {
+            showAlert("Password must contain at least one lowercase letter");
+            return;
+        }
+
+        if (!/[0-9]/.test(password)) {
+            showAlert("Password must contain at least one number");
+            return;
+        }
+
+        // All requirements met, proceed to create user
+
+        fetch('/users/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name,
+                password,
+                email,
+                phone
+            }),
+    
+
+        })
+        .then(response => {
+            response.text()
+        })
+        .then(result => {
+            //do nothing
+        })
+        .catch(error => {
+            console.error("Fetch error:", error);
+            showAlert("An error occurred while fetching data from the server.");
+        });
+
+        //wait 2 seconds before redirecting to index.html
+        setTimeout(function() {
+            window.location.href = '../index.html';
+        }, 2000);
+
+
     }
 
-     // Check password requirements
-     if (password.length < 8) {
-        showAlert("Password must be at least 8 characters");
-        return;
-    }
 
-    if (password !== confirmPassword) {
-        showAlert("Passwords do not match");
-        return;
-    }
-
-    if (!/[A-Z]/.test(password)) {
-        showAlert("Password must contain at least one uppercase letter");
-        return;
-    }
-
-    if (!/[a-z]/.test(password)) {
-        showAlert("Password must contain at least one lowercase letter");
-        return;
-    }
-
-    if (!/[0-9]/.test(password)) {
-        showAlert("Password must contain at least one number");
-        return;
-    }
-
-    // All password requirements met, proceed to create user
-
-    fetch('/users/create', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name,
-            password,
-            email,
-            phone
-        }),
-   
-
-    })
-    .then(response => response.text())
-    .then(result => handleFetchResult(result))
-    .catch(error => {
-        console.error("Fetch error:", error);
-        showAlert("An error occurred while fetching data from the server.");
-    });
-}
 
 
 
@@ -140,6 +219,11 @@ function showAlert(message) {
 
 function handleFetchResult(result) {
     try {
+        //if the result is a cookie, redirect to index.html
+        if (result.startsWith('userAuth')) {
+            window.location.href = '../index.html';
+            return;
+        }
         if (result.startsWith('{') || result.startsWith('[')) {
             // It looks like JSON, attempt to parse
             const jsonData = JSON.parse(result);

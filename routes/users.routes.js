@@ -24,4 +24,12 @@ router.delete("/:id", (req, res) => {
   return users.deleteUser(req, res);
 });
 
+router.post("/email", (req, res) => {
+  return users.getUserByEmail(req, res);
+});  
+
+router.post("/check", (req, res) => {
+  return users.checkUserByEmail(req, res);
+})
+
 module.exports = router;

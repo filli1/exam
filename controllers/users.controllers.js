@@ -21,8 +21,11 @@ exports.createUser = (req, res) => {
         }
 
         console.log(`A user has been inserted with id ${this.lastID}`);
-        console.log(req.body)
-        res.send(`User created successfully with id ${this.lastID}`);
+        //Set cookie with user id,
+        // res.cookie("userAuth", this.lastID, {
+        //     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
+        //     })
+        res.cookie("userAuth", this.lastID).send(`User created successfully with id ${this.lastID}`);
         db.close(); // Close the database connection after successful insertion
     });
 };
@@ -45,10 +48,28 @@ exports.getUser = (id) => {
     });
 }
 
+exports.checkUserByEmail = (req, res) => {
+    const email = req.body.email; 
+
+    const db = new sqlite3.Database(dbPath);
+    db.get(`SELECT * FROM users WHERE email=?`, [email], (err, row) => {
+        db.close(); // Close the database connection
+
+        if (err) {
+            res.status(500).send("Database error");
+        } else if (row) {
+            // User found; 1 means true. Using numbers to avoid issues when checking for ==="true" in frontend
+            res.json({ exists: 1 });
+        } else {
+            // User not found; 2 means false
+            res.json({ exists: 2 });
+        }
+    });
+};
+
 exports.getUserByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(dbPath);
-
         db.get(`SELECT * FROM users WHERE email=?`, [email], (err, row) => {
             db.close(); // Close the database connection here
 
@@ -58,9 +79,10 @@ exports.getUserByEmail = (email) => {
                 resolve(row);
             }
         });
-
     });
-}
+};
+
+
 
 exports.getUserReq = (req, res) => {
     const db = new sqlite3.Database(dbPath);
