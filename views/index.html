@@ -15,13 +15,15 @@
       <a href="../">Home</a>
       <a href="../products">Products</a>
       <a href="../order">Order</a>
-      <a id="open-popup" class="align-right" href="../login.html">Login</a>
+      <!-- <a id="open-popup" class="align-right">Login</a>
       <a class="align-right" href="../create-user.html">Create user</a>
+      -->
       <a id="cart-button" class="align-right" href="/cart">
-        Cart
-        <span id="cart-count" class="cart-count">0</span>
+          Cart
+          <span id="cart-count" class="cart-count">0</span>
       </a>
   </nav>
+  
     <!-- INDHOLD PÅ FORSIDE -->
     <div class="overlay">
       <section id="home">
@@ -66,20 +68,8 @@
         </div>
         <button class="pink-btn" onclick="location.href='../products'">SEE MORE PRODUCTS</button>
     </section>
-    <!-- The login popup -->
-<div id="login-popup" class="popup">
-  <div class="popup-content">
-      <span class="close" id="close-popup">&times;</span>
-      <h2>Login</h2>
-      <form id="login-form">
-          <label for="username">Username</label>
-          <input type="text" id="username" />
-          <label for="password">Password</label>
-          <input type="password" id="password" />
-          <input type="submit" value="Submit" />
-          <p class="pink-text">Create user</p>
-      </form>
-      </div>
     <script src="/scripts/popup.js"></script>
+    <script src="/scripts/login.js"></script>
+    <script src="/scripts/navigation.js"></script>
   </body>
 </html>

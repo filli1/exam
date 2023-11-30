@@ -1,16 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // This code runs after the DOM content is fully loaded
+  // Create the popup HTML and add it to the page
+  const popupHTML = `
+    <div id="login-popup" class="popup">
+      <div class="popup-content">
+        <span class="close" id="close-popup">&times;</span>
+        <h2 id="label">Login</h2>
+        <form id="login-form">
+          <label for="email">Email</label>
+          <input type="text" id="email" />
+          <label for="password">Password</label>
+          <input type="password" id="password" />
+          <input type="submit" value="Submit" id="login-submit-btn"/>
+          <p class="pink-text">Create user</p>
+        </form>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', popupHTML);
 
-  document
-    .getElementById("open-popup")
-    .addEventListener("click", function (event) {
-      console.log("Clicked on 'Login' link");
-      event.preventDefault();
-      document.getElementById("login-popup").style.display = "block";
+  // Add event listener for closing the popup
+  const closePopupButton = document.getElementById("close-popup");
+  if (closePopupButton) {
+    closePopupButton.addEventListener("click", function () {
+      const loginPopup = document.getElementById("login-popup");
+      if (loginPopup) {
+        loginPopup.style.display = "none";
+      }
     });
-
-  document.getElementById("close-popup").addEventListener("click", function () {
-    console.log("Clicked on 'Close' button");
-    document.getElementById("login-popup").style.display = "none";
-  });
+  }
 });

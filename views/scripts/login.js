@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const loginbutton = document.getElementById('loginbtn');
-  
+    
     // Define the login function
-    async function login() {
-      const email = document.getElementById('email-input').value;
-      const password = document.getElementById('password-input').value;
+    async function login(event) {
+      event.preventDefault(); // Prevent form from submitting normally
+  
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
   
       try {
         const response = await fetch('/users/login', {
@@ -14,24 +15,39 @@ document.addEventListener('DOMContentLoaded', function() {
           },
           body: JSON.stringify({ email, password }),
         });
-  
-        if (response.ok) {
-          const data = await response.json();
-          alert(data.message); // Show a success message
-          console.log(data);
-        } else {
-          const errorData = await response.json();
-          alert(errorData.error); // Show an error message
+        
+        const responseText = await response.text(); // Await the response content
+        function showAlert(message) {
+            alert(message);
         }
-      } catch (error) {
-        console.error('Login error:', error);
-        alert('An error occurred during login.'); // Show a generic error message
-      }
+        // Handle the response
+        if (response.ok) {
+            //refresh page
+            location.reload();
+        }
+        else {
+            showAlert(responseText);
+            //return here, to prevent the popup from closing
+            return;
+        }
+        }
+        catch (error) {
+            console.error(error);
+        }
+
+        const createUserLink = document.querySelector('a[href="../create-user.html"]');
+        if (createUserLink) {
+            createUserLink.style.display = 'none';
+        }
+        const loginBtn = document.getElementById("login-popup");
+        loginBtn.style.display = "none";
     }
   
-    // Add the event listener to the button (not form submission)
-    loginbutton.addEventListener('click', function(e) {
-      e.preventDefault(); // Prevent the button's default behavior
-      login();
-    });
+    // Attach event listener to the login form
+    const loginForm = document.getElementById('login-form');
+    //add event listener to login button, that runs login function and updates nav with function updateNav from navigation.js
+    if (loginForm) {
+        loginForm.addEventListener('submit', login);
+    }
+    
 });
