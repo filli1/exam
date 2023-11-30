@@ -54,37 +54,53 @@ function getCookie(name) {
             // Hide or remove the Login and Create User links
             const loginLink = document.getElementById("open-popup");
             if (loginLink) {
-              loginLink.style.display = 'none';
-            }
-            const createUserLink = document.querySelector('a[href="../create-user.html"]');
-            if (createUserLink) {
-              createUserLink.style.display = 'none';
+              loginLink.innerHTML = 'Log out';
+                loginLink.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    deleteCookie('userAuth');
+                    window.location.href = '/';
+                });
+                createUserLink = document.getElementById("createuser");
+                const userName = user.name;
+                createUserLink.innerHTML =  userName;
+
             }
           
-            // Add the user's name and Log out button
-            const nav = document.querySelector('nav');
-            const userName = user.name;
-            const logoutLink = '<a href="#" id="logout">Log out</a>';
-            nav.insertAdjacentHTML('beforeend', '<span id="users-name">' + userName + '</span>');
-            nav.insertAdjacentHTML('beforeend', logoutLink);
-            const logoutBtn = document.getElementById("logout");
-            logoutBtn.addEventListener('click', function (event) {
-              event.preventDefault();
-              deleteCookie('userAuth');
-              window.location.href = '/';
-            });
+            // // Add the user's name and Log out button
+            // const nav = document.querySelector('nav');
+            // const userName = user.name;
+            // const logoutLink = '<a href="#" id="logout">Log out</a>';
+            // nav.insertAdjacentHTML('beforeend', '<span id="users-name">' + userName + '</span>');
+            // nav.insertAdjacentHTML('beforeend', logoutLink);
+            // const logoutBtn = document.getElementById("logout");
+            // logoutBtn.addEventListener('click', function (event) {
+            //   event.preventDefault();
+            //   deleteCookie('userAuth');
+            //   window.location.href = '/';
+            // });
           }
            else {
             // User is not logged in
             // Hide or remove the Log out button
-            const logoutLink = document.querySelector('a[href="/logout"]');
+            const logoutLink = document.getElementById("open-popup");
             if (logoutLink) {
-                logoutLink.style.display = 'none';
+                logoutLink.innerHTML = 'Login';
+                logoutLink.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    const loginPopup = document.getElementById("login-popup");
+                    if (loginPopup) {
+                    loginPopup.style.display = "block";
+                    }
+                });
+
+                createUserLink = document.getElementById("createuser");
+                createUserLink.innerHTML = 'Create User';
+                createUserLink.href = '/create-user.html';
             }
             // Add the Login link
-            const nav = document.querySelector('nav');
-            const loginLink = '<a href="#" id="open-popup">Login</a>';
-            nav.insertAdjacentHTML('beforeend', loginLink);
+            // const nav = document.querySelector('nav');
+            // const loginLink = '<a href="#" id="open-popup">Login</a>';
+            // nav.insertAdjacentHTML('beforeend', loginLink);
 
             // Event listener for opening the popup
             const openPopupLink = document.getElementById("open-popup");
