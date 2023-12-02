@@ -4,9 +4,12 @@ const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
 const objectHash = require('object-hash'); //Used to hash passwords https://www.npmjs.com/package/object-hash
 
-function hashPassword(string){
-    const hashedstring = objectHash(string, {algorithm: 'RSA-SHA512'})
-    return hashedstring
+function hashPassword(string) {
+    if (!string || string === "xxxxxxxx") {
+        return null;
+    }
+    const hashedString = objectHash(string, { algorithm: 'RSA-SHA512' });
+    return hashedString;
 }
 
 exports.createUser = (req, res) => {
@@ -104,12 +107,10 @@ exports.editUser = (req, res) => {
     const userInfo = {
         name: req.body.name,
         email: req.body.email,
-        password: hashPassword(req.body.password),
         phone: req.body.phone
-    }
+    };
 
     const id = req.params.id;
-
     const updateFields = [];
     const values = [];
 
@@ -123,18 +124,18 @@ exports.editUser = (req, res) => {
         values.push(userInfo.email);
     }
 
-    if (userInfo.password !== undefined) {
+    const hashedPassword = hashPassword(req.body.password);
+    if (hashedPassword) {
         updateFields.push('password = ?');
-        values.push(userInfo.password);
+        values.push(hashedPassword);
     }
-
+    
     if (userInfo.phone !== undefined) {
         updateFields.push('phone = ?');
         values.push(userInfo.phone);
     }
 
     if (updateFields.length === 0) {
-        // If no fields to update, return an error or do nothing
         res.status(400).send('No fields to update');
         db.close();
         return;

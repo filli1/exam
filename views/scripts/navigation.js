@@ -21,7 +21,7 @@ function getCookie(name) {
     }
 
     const userAuth = getCookie('userAuth');
-    console.log(userAuth);
+   
 
     async function getUser(userAuth) {
         try {
@@ -33,7 +33,6 @@ function getCookie(name) {
             });
     
             if (response.ok) {
-                console.log(response)
                 const data = await response.json();
                 return data;
             } else {
@@ -51,7 +50,9 @@ function getCookie(name) {
         const user = await getUser(userAuth);
         if (user) {
             // User is logged in
-            // Hide or remove the Login and Create User links
+            // Change the log in button to a log out button
+            //Change the create user link to the user's name
+            //Add cart button
             const loginLink = document.getElementById("open-popup");
             if (loginLink) {
               loginLink.innerHTML = 'Log out';
@@ -63,21 +64,16 @@ function getCookie(name) {
                 createUserLink = document.getElementById("createuser");
                 const userName = user.name;
                 createUserLink.innerHTML =  userName;
+                createUserLink.href = '/account.html';
+
+                const cartBtn = document.getElementById("cart-button")
+                cartBtn.href = "../cart.html";
+                cartBtn.innerHTML = "Cart";
+
+            
 
             }
-          
-            // // Add the user's name and Log out button
-            // const nav = document.querySelector('nav');
-            // const userName = user.name;
-            // const logoutLink = '<a href="#" id="logout">Log out</a>';
-            // nav.insertAdjacentHTML('beforeend', '<span id="users-name">' + userName + '</span>');
-            // nav.insertAdjacentHTML('beforeend', logoutLink);
-            // const logoutBtn = document.getElementById("logout");
-            // logoutBtn.addEventListener('click', function (event) {
-            //   event.preventDefault();
-            //   deleteCookie('userAuth');
-            //   window.location.href = '/';
-            // });
+       
           }
            else {
             // User is not logged in
@@ -96,6 +92,8 @@ function getCookie(name) {
                 createUserLink = document.getElementById("createuser");
                 createUserLink.innerHTML = 'Create User';
                 createUserLink.href = '/create-user.html';
+                
+
             }
             // Add the Login link
             // const nav = document.querySelector('nav');

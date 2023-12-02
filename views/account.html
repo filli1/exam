@@ -14,7 +14,7 @@
       <a href="../products">Products</a>
       <a href="../order">Order</a>
       <a id="open-popup" class="align-right" href="../login.html">Login</a>
-      <a class="align-right" href="../account">My account</a>
+      <a class="align-right" href="../account" id = "createuser"></a>
       <a id="cart-button" class="align-right" href="/cart">
         Cart
         <span id="cart-count" class="cart-count">0</span>
@@ -22,27 +22,34 @@
   </nav>
     <section id="my-account">
 <div class="account-wrapper">
-<h1 id="username">My username</h1>
-
-
+<h1 id="accountHeader"></h1>
+<div class="account-info">
+    <div class="account-info-wrapper">
+        <h2>Your information</h2>
+        <label for="name">Name</label>
+        <input type="text" id="accountname" readonly/>
+        <label for="email">Email</label>
+        <input type="text" id="accountemail" readonly/>
+        <label for="phone">Phone number</label>
+        <input type="text" id="accountphone" readonly/>
+        <label for="password">Password</label>
+        <input type="password" id="accountpassword" readonly/>
+        <label for="confirmpass" id="confirmlabel"></label>
+        <input type="password" id="accountpasswordconfirm"/>
+        <button id="accountbtn">Edit</button>
+        <button id="accountsavebtn">Save changes</button>
+        <button id="accountcancelbtn">Cancel</button>
+    </div>
 
 </div>
+</div>
 
-    </section>
-    <!-- The login popup -->
-<div id="login-popup" class="popup">
-    <div class="popup-content">
-        <span class="close" id="close-popup">&times;</span>
-        <h2>Login</h2>
-        <form id="login-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" />
-            <label for="password">Password</label>
-            <input type="password" id="password" />
-            <input type="submit" value="Submit" />
-            <p class="pink-text">Create user</p>
-        </form>
+    
         </div>
-    <script src="../popup.js"></script>
+    <script src="/scripts/popup.js"></script>
+    <script src="/scripts/navigation.js"></script>
+    <script src="/scripts/login.js"></script>
+    <script src="/scripts/accountpage.js"></script>
+
   </body>
 </html>

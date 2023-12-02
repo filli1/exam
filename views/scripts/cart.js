@@ -1,6 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
-    displayCart();
+   displayCart() ;
 });
+
+
+//Cart should only be displayed if user is logged in
+//Check if user is logged in by checking if cookie exists
+
+function checkCookie() {
+    const userAuth = getCookie('userAuth');
+    if (userAuth) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
 function getCart() {
     var cart = sessionStorage.getItem('cart');

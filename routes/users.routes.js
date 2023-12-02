@@ -8,7 +8,6 @@ router.get("/f/:id", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-    console.log("test")
     return users.login(req, res);
 });
 
