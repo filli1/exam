@@ -502,3 +502,74 @@ th {
   margin-bottom: 1px;
   margin-top: 2px;
 }
+
+/*Account page*/
+#account-page{
+  background-image: url('../img/bagr3.avif');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+}
+
+/* #my-account {
+  display: flex;
+  flex-direction: row;
+  margin-top: 30px;
+} */
+
+#account-info{
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  background-color: #fff0f7;
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+  align-items: center;
+  max-width: 400px;
+  padding: 20px;
+  margin-top: 50px;
+  margin-left: 50px;;
+}
+
+#account-info h1{
+  font-weight: 450;
+  font-size: 27px;
+}
+
+#account-info h2{
+  font-weight: 400;
+  font-size: 20px;
+}
+
+
+#account-info label{
+  font-weight: 300;
+  font-size: 16px;
+  margin-bottom: 1px;
+  margin-top: 7px;
+}
+
+#account-info input{
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 1px;
+}
+
+#order-history{
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  background-color: #fff0f7;
+  border-radius: 10px;
+  padding: 5px;
+  width: 100%;
+  align-items: center;
+  max-width: 400px;
+  padding: 20px;
+  margin-top: 50px;
+  margin-left: 50px;
+}
