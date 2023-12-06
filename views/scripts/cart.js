@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
    displayCart() ;
+   // Call checkout function when the checkout button is clicked
+    document.querySelector('.checkout-button').addEventListener('click', checkout);
 });
 
 
@@ -20,6 +22,8 @@ function getCart() {
     var cart = sessionStorage.getItem('cart');
     return cart ? JSON.parse(cart) : {};
 }
+
+let lineItems = [];
 
 function displayCart() {
     const cart = getCart();
@@ -43,12 +47,35 @@ function displayCart() {
         fetch(`/products/${productId}`)
             .then(response => response.json())
             .then(product => {
+                lineItems.push({
+                    price: product.stripe_price_id,
+                    quantity: cart[productId].quantity,
+                })
                 const productElement = createProductElement(product, cart[productId].quantity);
                 cartTable.appendChild(productElement);
             })
             .catch(error => console.error('Error fetching product:', error));
     });
 }
+
+function checkout() {
+    const cartData = lineItems;
+
+    fetch('/orders/create-checkout-session', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(cartData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Redirect to the Stripe checkout page
+        window.location.href = data.url;
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 
 function createProductElement(product, quantity) {
     // Create a table row

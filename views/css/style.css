@@ -70,7 +70,7 @@ position: relative;
 left: 55%;
 }
 /* Button */
-button{
+.button{
     background-color: rgba(247, 193, 217, 1);
     padding: 20px 20px;
     cursor:pointer
@@ -572,4 +572,26 @@ th {
   padding: 20px;
   margin-top: 50px;
   margin-left: 50px;
+}
+
+.checkout-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.checkout-button {
+  background-color: rgba(247, 193, 217, 1); /* Green background */
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.checkout-button:hover {
+  background-color: rgb(247, 165, 202); /* Darker green on hover */
 }

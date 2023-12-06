@@ -1,11 +1,15 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const port = 3000;
 
 app.set('trust proxy', true);
 app.use(express.json());
 
 app.use(express.static('views'));
+
+// Enable CORS for all routes
+app.use(cors());
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/views/index.html');

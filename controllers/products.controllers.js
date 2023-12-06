@@ -2,14 +2,23 @@ const sqlite3 = require('sqlite3').verbose();
 const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
+const stripe = require('stripe')('sk_test_51O52F8FfrmyivZDpDbhTUpKWHJYF6njcwxBg5mRge22kAAd7DvSRQWtRaprIaZtS3LJNpST0RvhHdgll2DZFVlmk00RH7ZGpuQ');
 
 
-exports.addProduct = (req, res) => {
+exports.addProduct = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
     const { id, name, price, image } = req.body;
 
-    db.run(`INSERT INTO products (id, name, price, image) VALUES (?, ?, ?, ?)`, [id, name, price, image], function(err) {
+    const product = await stripe.products.create({
+        name: name,
+        default_price_data: {
+            currency: 'dkk',
+            unit_amount: price * 100,
+        }
+    });
+
+    db.run(`INSERT INTO products (id, name, price, image, stripe_id, stripe_price_id) VALUES (?, ?, ?, ?, ?, ?)`, [id, name, price, image, product.id, product.default_price], function(err) {
         if (err) {
             return console.error(err.message);
         }
@@ -21,7 +30,7 @@ exports.addProduct = (req, res) => {
 }
 
 
-exports.deleteProduct = (req, res) => {
+exports.deleteProduct = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
     const { id } = req.params;
