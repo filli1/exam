@@ -15,4 +15,8 @@ router.post('/create-checkout-session', (req, res) => {
     return orders.createCheckoutSession(req, res);
 })
 
+router.get('/success', (req, res) => {
+    return orders.successOrder(req, res);
+})
+
 module.exports = router;

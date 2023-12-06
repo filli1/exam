@@ -58,9 +58,10 @@ function displayCart() {
     });
 }
 
+//This takes the customer to the Stripe checkout page via the api endpoint on the server
 function checkout() {
     const cartData = lineItems;
-
+    
     fetch('/orders/create-checkout-session', {
         method: 'POST',
         headers: {
