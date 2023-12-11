@@ -5,6 +5,7 @@ require('dotenv').config({path:"./.env"});
 const express = require('express');
 const app = express();
 const cors = require('cors');
+require('dotenv').config();
 const port = 3000;
 
 app.set('trust proxy', true);

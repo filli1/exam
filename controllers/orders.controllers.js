@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
-const stripe = require('stripe')('sk_test_51O52F8FfrmyivZDpDbhTUpKWHJYF6njcwxBg5mRge22kAAd7DvSRQWtRaprIaZtS3LJNpST0RvhHdgll2DZFVlmk00RH7ZGpuQ');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const port = 3000;
 
 exports.newOrder = (req, res) => {
