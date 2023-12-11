@@ -11,10 +11,22 @@ body#frontpage{
   background-color: rgba(37, 40, 43, 1);
 }
 
+p {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.7;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
 /*Navigation*/
 nav{
     /* background-color: rgba(247, 193, 217, 1); */
     background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000; 
     padding: 30px 0px;
     display: flex;
     align-items: center;
@@ -421,6 +433,24 @@ th {
   background-color: #f2f2f2;
 }
 
+td button {
+  background-color: rgba(247, 193, 217, 1); /* Main color */
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  margin: 0 2px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  /*Adjust to right*/
+  float: right;
+}
+
+td button:hover {
+  background-color: rgba(247, 193, 217, 0.8); /* Slightly transparent on hover */
+}
+
+
 .input {
   width: 100%;
   padding: 10px;
@@ -604,4 +634,23 @@ th {
 .text-section h2 {
   font-size: 20px;
   font-weight: 400;
+}
+
+.product-image {
+  transition: transform 0.2s;
+}
+
+.product-image.animating {
+  transform: scale(1.1);
+}
+
+@keyframes jiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+}
+
+.jiggle {
+  animation: jiggle 500ms ease-in-out;
 }
