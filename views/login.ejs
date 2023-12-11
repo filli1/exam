@@ -8,19 +8,7 @@
   </head>
   <script src="/scripts/login.js"></script>
   <body>
-    <!-- HOVEDMENU -->
-    <nav>
-      <img
-        src="/views/img/logo.png"
-        id="header-logo"
-        alt="Joe & the juice logo"
-      />
-      <a href="/views/index.html">Home</a>
-      <a href="/views/products.html">Products</a>
-      <a href="/views/order.html">Order</a>
-      <a id="open-popup" class="align-right" href="/views/login.html">Login</a>
-      <a class="align-right" href="/views/account.html">My account</a>
-    </nav>
+    <%- include('partials/navbar') %>
    
 <!-- The login popup -->
   <div id="login-popup" class="popup">

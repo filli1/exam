@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 
 
 exports.addProduct = async (req, res) => {

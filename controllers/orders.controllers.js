@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 const port = 3000;
 
 exports.newOrder = (req, res) => {
@@ -38,7 +38,6 @@ exports.getOrdersbyUser = (req, res) => {
 const YOUR_DOMAIN = `http://localhost:${port}`;
 
 exports.createCheckoutSession = async (req, res) => {
-    console.log(req.body);
     try {
         const session = await stripe.checkout.sessions.create({
             line_items: req.body,
@@ -64,7 +63,6 @@ exports.createCheckoutSession = async (req, res) => {
 exports.successOrder = async (req, res) => {
     try {
         const sessionId = req.query.session_id;
-        console.log(sessionId);
         if (!sessionId) {
             return res.status(400).send('Session ID is required');
         }
@@ -74,7 +72,7 @@ exports.successOrder = async (req, res) => {
         // Check if the session is paid (you might want to check other statuses as well)
         if (session.payment_status === 'paid') {
             //Sends user to succes page
-            res.sendFile(path.join(__dirname, '..', 'views', 'order-approval.html'));
+            res.render(path.join(__dirname, '..', 'views', 'order-approval.ejs'));
         } else {
             res.status(403).send('Invalid session ID');
         }
