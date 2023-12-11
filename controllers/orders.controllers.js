@@ -3,6 +3,8 @@ const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
 const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
+const nodemailer = require("nodemailer");
+const bodyParser = require("body-parser");
 const port = 3000;
 
 exports.newOrder = (req, res) => {
@@ -59,6 +61,26 @@ exports.createCheckoutSession = async (req, res) => {
     }
 };
 
+const transporter = nodemailer.createTransport({
+    service: "Gmail",
+    auth: {
+      user: "cbsdisex@gmail.com",
+      pass: process.env.GMAIL_API_KEY,
+    },
+  });
+
+async function mailToUser(subject, text, recipients = []) {
+    const info = await transporter.sendMail({
+        from: "JOE <cbsdisex@gmail.com>", // sender address
+        to: recipients, // list of reciever addresses
+        subject: subject, // subject line
+        text: text, // plain text body
+        html: `<h1>${text}</h1>`, // html body
+    });
+
+    console.log("Message sent: %s", info.messageId);
+}
+
 //Validate the session and create the order in the database
 exports.successOrder = async (req, res) => {
     try {
@@ -68,9 +90,14 @@ exports.successOrder = async (req, res) => {
         }
 
         const session = await stripe.checkout.sessions.retrieve(sessionId);
+        console.log(session);
+        const email = session.customer_details.email;
+        const name = session.customer_details.name;
         
         // Check if the session is paid (you might want to check other statuses as well)
         if (session.payment_status === 'paid') {
+            //Sends user confirmation mail
+            mailToUser("Order confirmation", `Hi ${name}, your order is confirmed. You'll get an SMS when your order is ready for pickup.`, [email])
             //Sends user to succes page
             res.render(path.join(__dirname, '..', 'views', 'order-approval.ejs'));
         } else {
