@@ -24,11 +24,14 @@ app.get('/account', (req, res) => {
 app.get('/products', (req, res) => {
     res.render(__dirname + '/views/products.ejs');
 })
-app.get('/order', (req, res) => {
-    res.render(__dirname + '/views/order.ejs');
-})
+// app.get('/order', (req, res) => {
+//     res.render(__dirname + '/views/order.ejs');
+// })
 app.get('/cart', (req, res) => {
     res.render(__dirname + '/views/cart.ejs');
+})
+app.get('/create-user', (req, res) => {
+    res.render(__dirname + '/views/create-user.ejs');
 })
 
 var server = app.listen(port, function(error){

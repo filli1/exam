@@ -203,7 +203,7 @@ function checkPassword() {
 
         //wait 2 seconds before redirecting to index.html
         setTimeout(function() {
-            window.location.href = '../index.html';
+            window.location.href = '/';
         }, 2000);
 
 

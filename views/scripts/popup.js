@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", function () {
           <label for="email">Email</label>
           <input type="text" id="email" />
           <label for="password">Password</label>
-          <input type="password" id="password" />
+          <input type="password" id="password" autocomplete="current-password"/>
           <input type="submit" value="Submit" id="login-submit-btn"/>
-          <p class="pink-text">Create user</p>
+          <a class="pink-text" href="/create-user">Create user</a>
         </form>
       </div>
     </div>

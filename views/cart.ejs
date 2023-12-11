@@ -8,6 +8,7 @@
   </head>
   <script src="/scripts/addToCart.js"></script>
   <script src="/scripts/cart.js"></script>
+  <%- include('partials/scriptInit') %>
   <body>
     <!-- HOVEDMENU -->
     <%- include('partials/navbar') %>
@@ -22,20 +23,5 @@
     <div class="checkout-container" id="checkout-btn">
         <a class="checkout-button">Continue to Checkout</a>
     </div>
-    <!-- The login popup -->
-<div id="login-popup" class="popup">
-    <div class="popup-content">
-        <span class="close" id="close-popup">&times;</span>
-        <h2>Login</h2>
-        <form id="login-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" />
-            <label for="password">Password</label>
-            <input type="password" id="password" />
-            <input type="submit" value="Submit" />
-            <p class="pink-text">Create user</p>
-        </form>
-        </div>
-    <script src="../popup.js"></script>
   </body>
 </html>

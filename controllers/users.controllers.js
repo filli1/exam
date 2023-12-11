@@ -3,6 +3,7 @@ const { get } = require('http');
 const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
 const objectHash = require('object-hash'); //Used to hash passwords https://www.npmjs.com/package/object-hash
+const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 
 function hashPassword(string) {
     if (!string || string === "xxxxxxxx") {
@@ -12,26 +13,41 @@ function hashPassword(string) {
     return hashedString;
 }
 
-exports.createUser = (req, res) => {
+exports.createUser = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
     const { name, email, password, phone } = req.body;
 
-    db.run(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hashPassword(password), phone], function(err) {
-        if (err) {
-            db.close(); // Close the database connection in case of an error
-            return res.status(500).send(err.message);
-        }
-
-        console.log(`A user has been inserted with id ${this.lastID}`);
-        //Set cookie with user id,
-        // res.cookie("userAuth", this.lastID, {
-        //     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
-        //     })
-        res.cookie("userAuth", this.lastID).send(`User created successfully with id ${this.lastID}`);
-        db.close(); // Close the database connection after successful insertion
+    const runQuery = (query, params) => new Promise((resolve, reject) => {
+        db.run(query, params, function(err) {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(this.lastID);
+            }
+        });
     });
-};
+
+    try {
+        const userId = await runQuery(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hashPassword(password), phone]);
+
+        const customer = await stripe.customers.create({
+            name: name,
+            email: email,
+            phone: phone
+        });
+
+        console.log(`A user has been inserted with id ${userId}`);
+        res.cookie("userAuth", userId, {
+            maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
+        })
+        res.cookie("userAuth", userId).send(`User created successfully with id ${userId}`);
+    } catch (err) {
+        return res.status(500).send(err.message);
+    } finally {
+        db.close();
+    }
+}
 
 exports.getUser = (id) => {
     return new Promise((resolve, reject) => {

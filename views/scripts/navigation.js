@@ -24,23 +24,25 @@ function getCookie(name) {
    
 
     async function getUser(userAuth) {
-        try {
-            const response = await fetch('/users/f/' + userAuth, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-    
-            if (response.ok) {
-                const data = await response.json();
-                return data;
-            } else {
-                throw new Error(response.statusText);
+        if(userAuth){
+            try {
+                const response = await fetch('/users/f/' + userAuth, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+        
+                if (response.ok) {
+                    const data = await response.json();
+                    return data;
+                } else {
+                    throw new Error(response.statusText);
+                }
+            } catch (error) {
+                console.error(error);
+                return null; // Return null in case of an error
             }
-        } catch (error) {
-            console.error(error);
-            return null; // Return null in case of an error
         }
     }
     
@@ -52,7 +54,6 @@ function getCookie(name) {
             // User is logged in
             // Change the log in button to a log out button
             //Change the create user link to the user's name
-            //Add cart button
             const loginLink = document.getElementById("open-popup");
             if (loginLink) {
               loginLink.innerHTML = 'Log out';
@@ -61,16 +62,11 @@ function getCookie(name) {
                     deleteCookie('userAuth');
                     window.location.href = '/';
                 });
+
                 createUserLink = document.getElementById("createuser");
                 const userName = user.name;
                 createUserLink.innerHTML =  userName;
-                createUserLink.href = '/account.html';
-
-                const cartBtn = document.getElementById("cart-button")
-                cartBtn.href = "../cart.html";
-                cartBtn.innerHTML = "Cart";
-
-            
+                createUserLink.href = '/account';
 
             }
        
@@ -91,7 +87,7 @@ function getCookie(name) {
 
                 createUserLink = document.getElementById("createuser");
                 createUserLink.innerHTML = 'Create User';
-                createUserLink.href = '/create-user.html';
+                createUserLink.href = '/create-user';
                 
 
             }
@@ -112,7 +108,7 @@ function getCookie(name) {
             });
             }
             // Add the Create User link
-            const createUserLink = '<a id="createuserlink" href="/create-user.html">Create User</a>';
+            const createUserLink = '<a id="createuserlink" href="/create-user">Create User</a>';
             nav.insertAdjacentHTML('beforeend', createUserLink);
         }
         
