@@ -21,6 +21,7 @@
     "axios": "^1.6.0",
     "cloudinary": "^1.41.0",
     "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
@@ -28,6 +29,6 @@
     "path": "^0.12.7",
     "sqlite3": "^5.1.6",
     "stripe": "^14.7.0",
-    "twilio": "^4.19.0"
+    "twilio": "^4.19.3"
   }
 }
