@@ -7,7 +7,7 @@ router.post('/new', (req, res) => {
     return orders.newOrder(req, res);
 });
 
-router.get('/:id', (req, res) => {
+router.get('/getUserOrder/:id', (req, res) => {
     return orders.getOrdersbyUser(req, res);
 }); 
 

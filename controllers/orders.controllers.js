@@ -64,6 +64,7 @@ exports.createCheckoutSession = async (req, res) => {
 exports.successOrder = async (req, res) => {
     try {
         const sessionId = req.query.session_id;
+        console.log(sessionId);
         if (!sessionId) {
             return res.status(400).send('Session ID is required');
         }
@@ -72,7 +73,8 @@ exports.successOrder = async (req, res) => {
         
         // Check if the session is paid (you might want to check other statuses as well)
         if (session.payment_status === 'paid') {
-            res.sendFile(__dirname + '/views/order-approval.html');
+            //Sends user to succes page
+            res.sendFile(path.join(__dirname, '..', 'views', 'order-approval.html'));
         } else {
             res.status(403).send('Invalid session ID');
         }

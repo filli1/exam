@@ -595,3 +595,13 @@ th {
 .checkout-button:hover {
   background-color: rgb(247, 165, 202); /* Darker green on hover */
 }
+
+.text-section {
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.text-section h2 {
+  font-size: 20px;
+  font-weight: 400;
+}

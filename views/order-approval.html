@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="../css/style.css" />
     <title>Joe & the Juice - eksamensprojekt</title>
   </head>
   <body>
@@ -21,20 +21,21 @@
       <a class="align-right" href="../account">My account</a>
     </nav>
     <section id="message"></section>
-    <!-- The login popup -->
-<div id="login-popup" class="popup">
-    <div class="popup-content">
-        <span class="close" id="close-popup">&times;</span>
-        <h2>Login</h2>
-        <form id="login-form">
-            <label for="username">Username</label>
-            <input type="text" id="username" />
-            <label for="password">Password</label>
-            <input type="password" id="password" />
-            <input type="submit" value="Submit" />
-            <p class="pink-text">Create user</p>
-        </form>
-        </div>
-    <script src="/views/popup.js"></script>
+    <!-- success page -->
+    <section class="top-banner">
+      <h1>SUCCESS</h1>
+    </section>
+    <section class="text-section">
+      <h2>Thank you for your order!</h2>
+      <p>
+        Your order has been received and is being processed. You will receive an
+        email confirmation shortly.
+        <br><br>
+        You will recieve an SMS when your order is ready for pickup.
+      </p>
+      <p>
+        <a href="../products">Back to products</a>
+      </p>
+    </section>
   </body>
 </html>
