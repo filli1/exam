@@ -22,8 +22,8 @@ async function checkEmail(email) {
   }
 }
 
+//Set password field to password on focus. Done to prevent safari strong password feature from blocking the users ability to choose their own password.
 document.getElementById('create-password').addEventListener('focus', function() {
-  // Change the type from 'text' to 'password' on focus
   document.getElementById('create-password').type = 'password';
 });
 
