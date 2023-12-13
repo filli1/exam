@@ -490,6 +490,7 @@ td button:hover {
 }
 #create-user input{
   width: 300px;
+  height: 50px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
