@@ -230,6 +230,7 @@ exports.getUserByCookie = async (req, res, next) => {
 
         if (user) {
             if (next) {
+                console.log("GetUserByCookie: "+user)
                 // If used as middleware, add user to req and call next()
                 req.user = user;
                 return next();

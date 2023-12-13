@@ -11,6 +11,10 @@ router.get('/getUserOrder/:id', (req, res) => {
     return orders.getOrdersbyUser(req, res);
 }); 
 
+router.get('/retrieveSessions', (req, res) => {
+    return orders.retrieveSessions(req, res);
+})
+
 router.post('/create-checkout-session', (req, res) => {
     return orders.createCheckoutSession(req, res);
 })

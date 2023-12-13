@@ -26,6 +26,7 @@ function checkAuth(req, res, next) {
     if (req.cookies.userAuth) {
         usersController.getUserByCookie(req, res, function(err, user) {
             if (err) {
+                console.log(err);
                 // Handle error or redirect to login
                 res.redirect('/');
             } else if (user) {
@@ -44,7 +45,7 @@ function checkAuth(req, res, next) {
 }
 
 //Set pages
-app.get('/account', checkAuth,(req, res) => {
+app.get('/account', usersController.getUserByCookie,(req, res) => {
     res.render(__dirname + '/views/account.ejs');
 })
 app.get('/products', (req, res) => {

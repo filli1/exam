@@ -5,6 +5,7 @@ const dbPath = path.resolve(__dirname, '../data/joe.db');
 const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 const nodemailer = require("nodemailer");
 const bodyParser = require("body-parser");
+const usersController = require('./users.controllers');
 const port = 3000;
 
 exports.newOrder = (req, res) => {
@@ -37,10 +38,42 @@ exports.getOrdersbyUser = (req, res) => {
     db.close();
 }
 
+exports.retrieveSessions = async (req, res) => {
+    const userAuth = JSON.parse(req.cookies.userAuth);
+    try {
+        const sessions = await stripe.checkout.sessions.list({
+            customer: userAuth.stripeID,
+        });
+        const orders = sessions.data.map(session => {
+            return {
+                id: session.id,
+                payment_status: session.payment_status,
+                amount_total: session.amount_total/100,
+                customer: session.customer,
+            }
+        });
+        res.status(200).send(orders);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error retrieving sessions");
+    }
+}
+
+exports.retrieveSessionLineItems = async (session) => {
+    const lineItems = await stripe.checkout.sessions.listLineItems(
+        session.id,
+    );
+    return lineItems;
+}
+
 const YOUR_DOMAIN = `http://localhost:${port}`;
 
 exports.createCheckoutSession = async (req, res) => {
+    const userAuth = JSON.parse(req.cookies.userAuth);
+
     try {
+        const user = await usersController.getUser(userAuth.id);
+
         const session = await stripe.checkout.sessions.create({
             line_items: req.body,
             mode: 'payment',
@@ -49,6 +82,10 @@ exports.createCheckoutSession = async (req, res) => {
                   message: 'You\'ll get an email with your order confirmation, and a SMS when your order is ready for pickup.',
                 },
             },
+            phone_number_collection: {
+                enabled: true,
+            },
+            customer: userAuth.stripeID,
             success_url: `${YOUR_DOMAIN}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${YOUR_DOMAIN}/cart`,
         });
@@ -69,17 +106,28 @@ const transporter = nodemailer.createTransport({
     },
   });
 
-async function mailToUser(subject, text, recipients = []) {
+async function mailToUser(subject, text, html, recipients = []) {
     const info = await transporter.sendMail({
         from: "JOE <cbsdisex@gmail.com>", // sender address
         to: recipients, // list of reciever addresses
         subject: subject, // subject line
         text: text, // plain text body
-        html: `<h1>${text}</h1>`, // html body
+        html: html, // html body
     });
 
     console.log("Message sent: %s", info.messageId);
 }
+
+function createItemHtml(item) {
+    return `
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.productName}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.quantity}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${(item.price / 100).toFixed(2)} DKK</td>
+        </tr>
+    `;
+}
+
 
 //Validate the session and create the order in the database
 exports.successOrder = async (req, res) => {
@@ -90,14 +138,51 @@ exports.successOrder = async (req, res) => {
         }
 
         const session = await stripe.checkout.sessions.retrieve(sessionId);
-        console.log(session);
         const email = session.customer_details.email;
         const name = session.customer_details.name;
         
         // Check if the session is paid (you might want to check other statuses as well)
         if (session.payment_status === 'paid') {
+            // get the line items from the session
+            const lineItems = await exports.retrieveSessionLineItems(session);
+            const orderItems = lineItems.data.map(item => {
+                return {
+                    productName: item.description,
+                    quantity: item.quantity,
+                    price: item.amount_total,
+                }
+            });
+            const itemsHtml = orderItems.map(createItemHtml).join('');
+
+            const htmlContent = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Order Confirmation</title>
+                </head>
+                <body>
+                    <div style="font-family: Arial, sans-serif; color: #333;">
+                        <h1 style="background-color: rgba(247, 193, 217, 1); color: white; padding: 10px; text-align: center;">
+                            Order Confirmation
+                        </h1>
+                        <p>Hi ${name},</p>
+                        <p>Your order is confirmed. You'll get an SMS when your order is ready for pickup.</p>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <tr style="background-color: #f2f2f2;">
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Item</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Quantity</th>
+                                <th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd;">Price</th>
+                            </tr>
+                            ${itemsHtml}
+                        </table>
+                        <p style="text-align: center;">Thank you for shopping with us!</p>
+                    </div>
+                </body>
+                </html>
+                `;
+
             //Sends user confirmation mail
-            mailToUser("Order confirmation", `Hi ${name}, your order is confirmed. You'll get an SMS when your order is ready for pickup.`, [email])
+            mailToUser("Order confirmation", '', htmlContent, [email])
             //Sends user to succes page
             res.render(path.join(__dirname, '..', 'views', 'order-approval.ejs'));
         } else {
