@@ -7,6 +7,10 @@ router.get("/f/:id", (req, res) => {
   return users.getUserReq(req, res);
 });
 
+router.get("/checkWithCookie", (req, res) => {
+  return users.getUserByCookie(req, res);
+});
+
 router.post("/login", (req, res) => {
     return users.login(req, res);
 });

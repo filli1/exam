@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+
     
     // Define the login function
     async function login(event) {

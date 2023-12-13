@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-   displayCart() ;
+   displayCart();
    // Call checkout function when the checkout button is clicked
     document.querySelector('.checkout-button').addEventListener('click', checkout);
 });
@@ -8,27 +8,41 @@ document.addEventListener('DOMContentLoaded', () => {
 //Cart should only be displayed if user is logged in
 //Check if user is logged in by checking if cookie exists
 
-function checkCookie() {
-    const userAuth = getCookie('userAuth');
-    if (userAuth) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
+// async function getUser() {
+//     try {
+//         const response = await fetch("/users/checkWithCookie", {
+//             method: "GET",
+//             headers: {
+//             "Content-Type": "application/json",
+//             },
+//         });
+
+//         if (response.ok) {
+//             const data = await response.json();
+//             return data;
+//         } else {
+//             throw new Error(response.statusText);
+//         }
+//         } catch (error) {
+//         //console.error(error);
+//         return null; // Return null in case of an error
+//         }
+// }
 
 function getCart() {
     var cart = sessionStorage.getItem('cart');
     return cart ? JSON.parse(cart) : {};
 }
 
-lineItems = [];
+let lineItems = [];
 
-function displayCart() {
+async function displayCart() {
     const cart = getCart();
     const numberOfDistinctProducts = Object.keys(cart).length;
     const cartOverview = document.getElementById('cart-overview');
+
+    const user = await getUser()
+    console.log(user)
 
     // If the cart is empty, display a message and return
     if (numberOfDistinctProducts === 0) {
@@ -40,6 +54,23 @@ function displayCart() {
         checkoutButton.style.display = 'none';
         return;
     } else {
+
+        if (!user) {
+            checkoutButton = document.querySelector('.checkout-button');
+            checkoutButton.removeEventListener('click', checkout);
+            checkoutButton.style.backgroundColor = 'grey';
+            checkoutButton.style.cursor = 'not-allowed';
+            checkoutButton.style.color = 'black';
+
+            // Create a tooltip message
+            const tooltip = document.createElement('span');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = 'Create a user or log in to continue to checkout.';
+            checkoutButton.appendChild(tooltip);
+            checkoutButton.addEventListener("mouseover", showTooltip);
+            checkoutButton.addEventListener("mouseout", hideTooltip);
+            
+        }
 
         // Create a table element
         const cartTable = document.createElement('table');
@@ -56,7 +87,6 @@ function displayCart() {
 
         // Append product rows to the table
         Object.keys(cart).forEach(productId => {
-            console.log(productId);
             fetch(`/products/${productId}`)
                 .then(response => response.json())
                 .then(product => {
@@ -76,6 +106,15 @@ function displayCart() {
         cartOverview.appendChild(totalDisplay);
         updateCartTotal();
     }
+}
+
+function showTooltip() {
+    const tooltip = document.querySelector(".tooltip");
+    tooltip.style.display = "block";
+}
+function hideTooltip() {
+    const tooltip = document.querySelector(".tooltip");
+    tooltip.style.display = "none";
 }
 
 //This takes the customer to the Stripe checkout page via the api endpoint on the server

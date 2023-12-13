@@ -29,20 +29,32 @@ exports.createUser = async (req, res) => {
     });
 
     try {
-        const userId = await runQuery(`INSERT INTO users (name, email, password, phone) VALUES (?, ?, ?, ?)`, [name, email, hashPassword(password), phone]);
-
         const customer = await stripe.customers.create({
             name: name,
             email: email,
             phone: phone
         });
 
+        const customerStripeID = customer.id
+
+        const userId = await runQuery(`INSERT INTO users (name, email, password, phone, stripeID) VALUES (?, ?, ?, ?, ?)`, [name, email, hashPassword(password), phone, customerStripeID]);
+
         console.log(`A user has been inserted with id ${userId}`);
-        res.cookie("userAuth", userId, {
+
+        const cookie = {
+            id: userId,
+            stripeID: customerStripeID,
+        }
+
+        // res.cookie("userAuth", JSON.stringify(cookie), {
+        //     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
+        // })
+        // res.cookie("userAuth", cookie).send(`User created successfully with id ${userId}`);
+        res.status(200).cookie("userAuth", JSON.stringify(cookie), {
             maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
-        })
-        res.cookie("userAuth", userId).send(`User created successfully with id ${userId}`);
+          }).send(`User created successfully with id ${userId}`);
     } catch (err) {
+        console.error(err.message)
         return res.status(500).send(err.message);
     } finally {
         db.close();
@@ -100,8 +112,6 @@ exports.getUserByEmail = (email) => {
         });
     });
 };
-
-
 
 exports.getUserReq = (req, res) => {
     const db = new sqlite3.Database(dbPath);
@@ -202,19 +212,61 @@ exports.deleteUser = async (req, res) => {
 
 }
 
-exports.login = async (req, res) => {
-    console.log("Logging in...")
-    const email = req.body.email;
-    console.log("Given email: " + email)
-    const password = hashPassword(req.body.password);
-    console.log("Input password: " + password)
+//Functions both for middleware and endpoints
+exports.getUserByCookie = async (req, res, next) => {
+    
+    if (!req.cookies.userAuth) {
+        if (next) {
+            return next('No user logged in');
+        } else {
+            return res.status(401).send("No user logged in");
+        }
+    }
+    console.log("GetUserByCookie: "+req.cookies.userAuth)
+    const userAuth = JSON.parse(req.cookies.userAuth);
 
+    try {
+        let user = await exports.getUser(userAuth.id);
+
+        if (user) {
+            if (next) {
+                // If used as middleware, add user to req and call next()
+                req.user = user;
+                return next();
+            } else {
+                // If used as endpoint, send user data
+                return res.status(200).send(user);
+            }
+        } else {
+            if (next) {
+                return next('User not found');
+            } else {
+                return res.status(404).send("User not found");
+            }
+        }
+    } catch (error) {
+        if (next) {
+            return next(error);
+        } else {
+            return res.status(500).send("Error getting user");
+        }
+    }
+}
+
+exports.login = async (req, res) => {
+    const email = req.body.email;
+    const password = hashPassword(req.body.password);
     try {
         let user = await exports.getUserByEmail(email);
 
+        const cookie = {
+            id: user.id,
+            stripeID: user.stripeID,
+        }
+
         if(user){
             if (user.password === password){
-                res.status(200).cookie("userAuth", user.id, {
+                res.status(200).cookie("userAuth", JSON.stringify(cookie), {
                     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
                   }).send(`User logged in with id ${user.id}`);
             } else {

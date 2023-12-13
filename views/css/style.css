@@ -654,3 +654,25 @@ td button:hover {
 .jiggle {
   animation: jiggle 500ms ease-in-out;
 }
+
+.tooltip {
+  display: none; /* Initially hidden */
+  position: absolute; /* Position relative to the nearest positioned ancestor */
+  background-color: yellow; /* Tooltip background */
+  color: black; /* Tooltip text color */
+  padding: 5px; /* Padding inside the tooltip */
+  border-radius: 4px; /* Rounded corners */
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.2); /* Shadow effect */
+  z-index: 1000; /* Ensure it's above other elements */
+  white-space: nowrap; /* Prevents text wrapping */
+  font-size: 12px; /* Font size of the tooltip text */
+}
+
+/* Position the tooltip next to the mouse */
+.checkoutButton:hover .tooltip {
+  display: block; /* Show the tooltip */
+  position: fixed; /* Fixed relative to the viewport */
+  left: 50%; /* Center horizontally */
+  top: 50%; /* Center vertically */
+  transform: translate(-50%, -50%); /* Adjust for exact centering */
+}
