@@ -22,6 +22,11 @@ async function checkEmail(email) {
   }
 }
 
+document.getElementById('create-password').addEventListener('focus', function() {
+  // Change the type from 'text' to 'password' on focus
+  document.getElementById('create-password').type = 'password';
+});
+
 // Function to check password requirements
 function checkPassword() {
   const password = document.getElementById("create-password").value;
