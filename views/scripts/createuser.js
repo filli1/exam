@@ -26,6 +26,10 @@ async function checkEmail(email) {
 document.getElementById('create-password').addEventListener('focus', function() {
   document.getElementById('create-password').type = 'password';
 });
+//Same for confirm password field
+document.getElementById('create-password-confirm').addEventListener('focus', function() {
+  document.getElementById('create-password-confirm').type = 'password';
+}); 
 
 // Function to check password requirements
 function checkPassword() {
