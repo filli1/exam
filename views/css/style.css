@@ -475,7 +475,6 @@ td button:hover {
   margin-top: 50px;
   margin-left: 50px;
 }
-  
 
 #createuserbody {
   background-image: url('../img/bagr.jpeg');
@@ -540,15 +539,10 @@ td button:hover {
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  background-attachment:scroll;
   height: 100vh;
 
 }
-
-/* #my-account {
-  display: flex;
-  flex-direction: row;
-  margin-top: 30px;
-} */
 
 #account-info{
   display: flex;
@@ -557,23 +551,27 @@ td button:hover {
   background-color: #fff0f7;
   border-radius: 10px;
   padding: 5px;
-  width: 100%;
+  width: 50%;
   align-items: center;
-  max-width: 400px;
   padding: 20px;
   margin-top: 50px;
   margin-left: 50px;;
   max-height: fit-content;
 }
 
+#account-info .pink-btn{
+  border-radius: 3px;
+
+}
+
 #account-info h1{
   font-weight: 450;
-  font-size: 15px;
+  font-size: 20px;
 }
 
 #account-info h2{
   font-weight: 400;
-  font-size: 20px;
+  font-size: 18px;
 }
 
 
@@ -599,7 +597,7 @@ td button:hover {
   background-color: #fff0f7;
   border-radius: 10px;
   padding: 5px;
-  width: 100%;
+  width: 50%;
   align-items: center;
   padding: 20px;
   margin-top: 50px;
@@ -607,6 +605,39 @@ td button:hover {
   margin-right: 50px;
 }
 
+#order-header{
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  font-style: italic;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: none; 
+}
+td {
+  padding: 8px;
+  border: none;
+}
+
+th {
+  text-align: left;
+  padding: 8px;
+  border: none; 
+  font-style: italic;
+  background-color: transparent;
+}
+
+table tr:last-child td:last-child {
+  font-style: italic;
+  font-weight: bold;
+}
+
+
+
+/*Checkout page*/
 .checkout-container {
   text-align: center;
   margin-top: 20px;
