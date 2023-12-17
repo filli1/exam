@@ -23,4 +23,8 @@ router.get('/success', (req, res) => {
     return orders.successOrder(req, res);
 })
 
+router.get('/items/:sessionId', (req, res) => {
+    return orders.getItemsInSession(req, res);
+})   
+
 module.exports = router;

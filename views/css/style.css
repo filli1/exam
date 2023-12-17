@@ -540,6 +540,7 @@ td button:hover {
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+  height: 100vh;
 
 }
 
@@ -562,11 +563,12 @@ td button:hover {
   padding: 20px;
   margin-top: 50px;
   margin-left: 50px;;
+  max-height: fit-content;
 }
 
 #account-info h1{
   font-weight: 450;
-  font-size: 27px;
+  font-size: 15px;
 }
 
 #account-info h2{
@@ -599,10 +601,10 @@ td button:hover {
   padding: 5px;
   width: 100%;
   align-items: center;
-  max-width: 400px;
   padding: 20px;
   margin-top: 50px;
   margin-left: 50px;
+  margin-right: 50px;
 }
 
 .checkout-container {
@@ -676,4 +678,21 @@ td button:hover {
   left: 50%; /* Center horizontally */
   top: 50%; /* Center vertically */
   transform: translate(-50%, -50%); /* Adjust for exact centering */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+#account-info {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 300px;
+}
+
+#order-history {
+  flex-grow: 1; /* Takes up remaining space */
+  flex-shrink: 1;
 }

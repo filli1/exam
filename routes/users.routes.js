@@ -19,7 +19,7 @@ router.post("/create", (req, res) => {
   return users.createUser(req, res);
 });
 
-router.put("/:id", (req, res) => {
+router.put("/", (req, res) => {
   return users.editUser(req, res);
 });
 

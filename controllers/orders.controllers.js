@@ -8,41 +8,12 @@ const bodyParser = require("body-parser");
 const usersController = require('./users.controllers');
 const port = 3000;
 
-exports.newOrder = (req, res) => {
-    const db = new sqlite3.Database(dbPath);
-
-    const {id, user_id, product_id, order_date, price, quantity} = req.body;
-    db.run(`INSERT INTO orders (id, user_id, product_id, price, quantity) VALUES (?, ?, ?, ?, ?)`, [id, user_id, product_id, price, quantity], function(err) {
-        if (err) {
-            return console.error(err.message);
-        }
-        console.log(`A order has been inserted with id ${this.lastID}`);
-        res.send(`Order created successfully with id ${this.lastID}`);
-    });
-
-    db.close();
-}
-
-exports.getOrdersbyUser = (req, res) => {
-    const db = new sqlite3.Database(dbPath);
-
-    const { id } = req.params;
-
-    db.all(`SELECT * FROM orders WHERE user_id=?`, [id], (err, rows) => {
-        if (err) {
-            return console.error(err.message);
-        }
-        res.send(rows);
-    });
-
-    db.close();
-}
-
 exports.retrieveSessions = async (req, res) => {
     const userAuth = JSON.parse(req.cookies.userAuth);
     try {
         const sessions = await stripe.checkout.sessions.list({
             customer: userAuth.stripeID,
+            status: 'complete',
         });
         const orders = sessions.data.map(session => {
             return {
@@ -50,6 +21,7 @@ exports.retrieveSessions = async (req, res) => {
                 payment_status: session.payment_status,
                 amount_total: session.amount_total/100,
                 customer: session.customer,
+                date: session.created,
             }
         });
         res.status(200).send(orders);
@@ -59,6 +31,27 @@ exports.retrieveSessions = async (req, res) => {
     }
 }
 
+exports.getItemsInSession = async (req, res) => {
+    const session = {
+        id: req.params.sessionId
+    }
+    try {
+        const lineItems = await exports.retrieveSessionLineItems(session);
+        const orderItems = lineItems.data.map(item => {
+            return {
+                productName: item.description,
+                quantity: item.quantity,
+                price: item.amount_total,
+            }
+        });
+        res.status(200).send(orderItems);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("Error retrieving items in session");
+    }
+
+}
+
 exports.retrieveSessionLineItems = async (session) => {
     const lineItems = await stripe.checkout.sessions.listLineItems(
         session.id,
@@ -66,10 +59,10 @@ exports.retrieveSessionLineItems = async (session) => {
     return lineItems;
 }
 
-const YOUR_DOMAIN = `https://joetogo.dk`;
 
 exports.createCheckoutSession = async (req, res) => {
     const userAuth = JSON.parse(req.cookies.userAuth);
+    const origin = req.headers.origin
 
     try {
         const user = await usersController.getUser(userAuth.id);
@@ -86,8 +79,8 @@ exports.createCheckoutSession = async (req, res) => {
                 enabled: true,
             },
             customer: userAuth.stripeID,
-            success_url: `${YOUR_DOMAIN}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${YOUR_DOMAIN}/cart`,
+            success_url: `${origin}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${origin}/cart`,
         });
 
         // Send the session URL in a JSON response
@@ -114,8 +107,6 @@ async function mailToUser(subject, text, html, recipients = []) {
         text: text, // plain text body
         html: html, // html body
     });
-
-    console.log("Message sent: %s", info.messageId);
 }
 
 function createItemHtml(item) {
@@ -187,7 +178,7 @@ exports.successOrder = async (req, res) => {
             mailToUser("Order confirmation", '', htmlContent, [email])
             //Sends user SMS in 2 minutes
             setTimeout(() => {
-                sendSMS(phone);
+                sendSMS(phone, name);
             }, 2 * 60 * 1000)
             //Sends user to succes page
             res.render(path.join(__dirname, '..', 'views', 'order-approval.ejs'));
@@ -213,5 +204,4 @@ function sendSMS(phoneNumber, name) {
             from: '+1 914 425 5822',
             to: phoneNumber,
         })
-        .then(message => console.log(message.sid));
 }

@@ -12,19 +12,19 @@
 
     <div id="my-account">
 <div class="account-wrapper">
-
+<section id="account-page-section" class="wrapper">
 <div id="account-info">
   <h1 id="accountHeader"></h1>
     <div class="account-info-wrapper">
         <h2>Your information</h2>
         <label for="name">Name</label>
-        <input type="text" id="accountname" readonly/>
+        <input type="text" id="accountname" readonly disabled/>
         <label for="email">Email</label>
-        <input type="text" id="accountemail" readonly/>
+        <input type="text" id="accountemail" readonly disabled/>
         <label for="phone">Phone number</label>
-        <input type="text" id="accountphone" readonly/>
+        <input type="text" id="accountphone" readonly disabled/>
         <label for="password">Password</label>
-        <input type="password" id="accountpassword" readonly/>
+        <input type="password" id="accountpassword" readonly disabled/>
         <label for="confirmpass" id="confirmlabel"></label>
         <input type="password" id="accountpasswordconfirm"/>
         <button id="accountbtn">Edit</button>
@@ -34,20 +34,17 @@
 
 </div>
 
-<div id="order-history"
->
+<div id="order-history">
   <h2>Order history</h2>
   <div id="order-history-wrapper">
     <div id="order-history-header">
-      <p>Order number</p>
-      <p>Order date</p>
-      <p>Order total</p>
-      <p>Order status</p>
+
     </div>
     <div id="order-history-content">
     </div>
   </div>
 </div>
+</section>
 </div>
 
     

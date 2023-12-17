@@ -39,8 +39,6 @@ exports.createUser = async (req, res) => {
 
         const userId = await runQuery(`INSERT INTO users (name, email, password, phone, stripeID) VALUES (?, ?, ?, ?, ?)`, [name, email, hashPassword(password), phone, customerStripeID]);
 
-        console.log(`A user has been inserted with id ${userId}`);
-
         const cookie = {
             id: userId,
             stripeID: customerStripeID,
@@ -136,7 +134,9 @@ exports.editUser = (req, res) => {
         phone: req.body.phone
     };
 
-    const id = req.params.id;
+    const cookie = JSON.parse(req.cookies.userAuth);
+
+    const id = cookie.id;
     const updateFields = [];
     const values = [];
 
@@ -167,6 +167,17 @@ exports.editUser = (req, res) => {
         return;
     }
 
+    const customer = stripe.customers.update(
+        cookie.stripeID,
+        {
+            name: userInfo.name,
+            email: userInfo.email,
+            phone: userInfo.phone
+        }
+    ).then(customer => {
+        console.log(customer);
+    });
+
     const query = `UPDATE users SET ${updateFields.join(', ')} WHERE id = ?`;
     values.push(id);
 
@@ -184,7 +195,6 @@ exports.deleteUser = async (req, res) => {
     const id = req.params.id;
 
     const password = hashPassword(req.body.password);
-    console.log("Given password: " + password)
 
     try {
         let user = await exports.getUser(id);
@@ -222,7 +232,6 @@ exports.getUserByCookie = async (req, res, next) => {
             return res.status(401).send("No user logged in");
         }
     }
-    console.log("GetUserByCookie: "+req.cookies.userAuth)
     const userAuth = JSON.parse(req.cookies.userAuth);
 
     try {
@@ -230,7 +239,6 @@ exports.getUserByCookie = async (req, res, next) => {
 
         if (user) {
             if (next) {
-                console.log("GetUserByCookie: "+user)
                 // If used as middleware, add user to req and call next()
                 req.user = user;
                 return next();

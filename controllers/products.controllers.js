@@ -22,7 +22,6 @@ exports.addProduct = async (req, res) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log(`A product has been inserted with id ${this.lastID}`);
         res.send(`Product created successfully with id ${this.lastID}`);
     });
 
@@ -39,7 +38,6 @@ exports.deleteProduct = async (req, res) => {
         if (err) {
             return console.error(err.message);
         }
-        console.log(`A product has been deleted with id ${id}`);
         res.send(`Product deleted successfully with id ${id}`);
     });
 
