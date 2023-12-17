@@ -11,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
           <label for="password">Password</label>
           <input type="password" id="password" autocomplete="current-password"/>
           <input type="submit" value="Submit" id="login-submit-btn"/>
-          <a class="pink-text" href="/create-user">Create user</a>
+          <a class="pink-text" href="/create-user">Don't have a user? Click here to sign up!</a>
+          
         </form>
       </div>
     </div>

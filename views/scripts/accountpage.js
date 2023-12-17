@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const month = date.getMonth() + 1; // JavaScript months are 0-indexed
             const year = date.getFullYear();
             const dateNew = `${day}/${month}/${year}`;
-            const paymentStatus = order.payment_status;
+
             const orderTotal = order.amount_total;
 
             //Adds a random emoji to the order line
