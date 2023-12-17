@@ -8,8 +8,8 @@ const client = require('twilio')(accountSid, authToken);
 
 client.messages
   .create({
-     body: '',
+     body: 'halløj',
      from: '+1 914 425 5822',
-     to: ''
+     to: '+4531317198'
    })
   .then(message => console.log(message.sid));

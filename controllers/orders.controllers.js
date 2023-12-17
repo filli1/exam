@@ -66,7 +66,7 @@ exports.retrieveSessionLineItems = async (session) => {
     return lineItems;
 }
 
-const YOUR_DOMAIN = `http://localhost:${port}`;
+const YOUR_DOMAIN = `https://joetogo.dk`;
 
 exports.createCheckoutSession = async (req, res) => {
     const userAuth = JSON.parse(req.cookies.userAuth);
@@ -140,6 +140,7 @@ exports.successOrder = async (req, res) => {
         const session = await stripe.checkout.sessions.retrieve(sessionId);
         const email = session.customer_details.email;
         const name = session.customer_details.name;
+        const phone = session.customer_details.phone;
         
         // Check if the session is paid (you might want to check other statuses as well)
         if (session.payment_status === 'paid') {
@@ -152,6 +153,7 @@ exports.successOrder = async (req, res) => {
                     price: item.amount_total,
                 }
             });
+            // Put together the HTML for the Items to the email
             const itemsHtml = orderItems.map(createItemHtml).join('');
 
             const htmlContent = `
@@ -183,6 +185,10 @@ exports.successOrder = async (req, res) => {
 
             //Sends user confirmation mail
             mailToUser("Order confirmation", '', htmlContent, [email])
+            //Sends user SMS in 2 minutes
+            setTimeout(() => {
+                sendSMS(phone);
+            }, 2 * 60 * 1000)
             //Sends user to succes page
             res.render(path.join(__dirname, '..', 'views', 'order-approval.ejs'));
         } else {
@@ -192,4 +198,20 @@ exports.successOrder = async (req, res) => {
         console.error(err);
         res.status(500).send('An error occurred');
     }
+}
+
+//This function uses the twilio package to send an SMS to the user
+function sendSMS(phoneNumber, name) {
+    const accountSid = process.env.TWILIO_ACCOUNT_SID;
+    const authToken = process.env.TWILIO_AUTH_TOKEN;
+    const client = require('twilio')(accountSid, authToken);
+
+    client.messages
+        .create({
+            body: `Hey ${name}! Your JOE order is ready for pickup!`,
+            messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
+            from: '+1 914 425 5822',
+            to: phoneNumber,
+        })
+        .then(message => console.log(message.sid));
 }
