@@ -201,7 +201,7 @@ function sendSMS(phoneNumber, name) {
         .create({
             body: `Hey ${name}! Your JOE order is ready for pickup!`,
             messagingServiceSid: process.env.TWILIO_MESSAGING_SERVICE_SID,
-            from: '+1 914 425 5822',
+            from: 'JoeToGo',
             to: phoneNumber,
         })
 }
