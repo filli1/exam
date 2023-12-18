@@ -21,7 +21,7 @@ function addProductElement(product) {
         <img src="${product.image}" alt="${product.name}" />
         <div class="product-desc">
             <h1>${product.name}</h1>
-            <p>Joe's Classic Bread, Vegan Pesto, Avocado, Chicken, Tomato</p>
+            <p>${product.description}</p>
             <p>${product.price.toFixed(2)} kr.</p>
         </div>
     `;

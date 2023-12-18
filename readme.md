@@ -91,6 +91,13 @@ For at få en lokal kopi af projektet op at køre, skal du følge disse enkle ek
     ```sh
     npm start
     ```
+* Serveren kører nu på http://localhost:3000/
+* For at gennemføre en transaktion, skal du bruge følgende testkort:
+    ```sh
+    Kortnummer: 4242 4242 4242 4242
+    Udløbsdato: Enhver måned og år i fremtiden
+    CVC: Et vilkårligt 3-cifret tal
+    ```
 
 ### Forudsætninger
 

@@ -8,7 +8,7 @@ const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 exports.addProduct = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
-    const { id, name, price, image } = req.body;
+    const { id, name, price, image, description } = req.body;
 
     const product = await stripe.products.create({
         name: name,
@@ -18,7 +18,7 @@ exports.addProduct = async (req, res) => {
         }
     });
 
-    db.run(`INSERT INTO products (id, name, price, image, stripe_id, stripe_price_id) VALUES (?, ?, ?, ?, ?, ?)`, [id, name, price, image, product.id, product.default_price], function(err) {
+    db.run(`INSERT INTO products (id, name, price, image, stripe_id, stripe_price_id, description) VALUES (?, ?, ?, ?, ?, ?, ?)`, [id, name, price, image, product.id, product.default_price, description], function(err) {
         if (err) {
             return console.error(err.message);
         }
