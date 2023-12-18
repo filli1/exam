@@ -176,7 +176,6 @@ function createProductElement(product, quantity) {
     minusBtn.textContent = '-';
     minusBtn.onclick = () => adjustQuantity(product.id, -1);
     quantityCell.appendChild(minusBtn);
-
     tr.appendChild(quantityCell);
 
      // Create and append the price cell

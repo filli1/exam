@@ -1,3 +1,9 @@
+document.addEventListener('DOMContentLoaded', () => {
+    getUserInfo();
+    getOrderHistory();
+ });
+
+
 //Display userinfo, and allow the user to edit it
         //Hide the buttons that are not needed yet
         document.getElementById("accountsavebtn").style.display = "none";
@@ -128,38 +134,13 @@
 
             
 
-        getUserInfo();
+        
 
 
-// {
-//     "id": "cs_test_a1nHWiVzoXzItjf9xYhavULHovLckPdKw3swgo7uUoj0C7B1WBMuw9MdVr",
-//     "payment_status": "paid",
-//     "amount_total": 45,
-//     "customer": "cus_PBF2WtLibsGjDM",
-//     "date": 1702823694
-// },
 
 //Next part displays the user's order history, by using the retrieveSessions controller. 
-async function getOrderHistory() {
-const orderHistory = await fetch('/orders/retrieveSessions', {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-})
-.then(response => response.json())
-.then(data => {
-    console.log('Session:', data);
-    return data;
-})
-.catch((error) => {
-    console.error('Error:', error);
-});
-//Loop through all sessionId's in the orderHistory array, and display the order details
-for (let i = 0; i < orderHistory.length; i++) {
-    const order = orderHistory[i];
-    const id = order.id;
-    const itemHistory = await fetch('/orders/items/' + id, {
+    async function getOrderHistory() {
+    const orderHistory = await fetch('/orders/retrieveSessions', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -167,61 +148,94 @@ for (let i = 0; i < orderHistory.length; i++) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Items:', data);
+        console.log('Session:', data);
+
         return data;
     })
     .catch((error) => {
         console.error('Error:', error);
     });
-    //Define all the variables that will be used to display the order details
-    const date = new Date(order.date * 1000);
-    //Only display the date, not the time
-    day = date.getDate();
-    month = date.getMonth();
-    year = date.getFullYear();
-    dateNew = day + "/" + month + "/" + year;
-    const paymentStatus = order.payment_status;
-    //Display the order details in a table format
-    const orderDisplay = document.getElementById("order-history")
-    let table = document.createElement("table");
-    let headerRow = document.createElement("tr");
-        let headers = ["Date", "Payment Status", "Item", "Quantity"];
-        headers.forEach(headerText => {
-            let header = document.createElement("th");
-            header.textContent = headerText;
-            headerRow.appendChild(header);
-    });
-    table.appendChild(headerRow);
-    let row = document.createElement("tr");
-        row.appendChild(createCell("Date: " + dateNew));
-        row.appendChild(createCell("Payment Status: " + paymentStatus));
-        row.appendChild(createCell("")); // Empty cell for alignment
-        row.appendChild(createCell("")); // Empty cell for alignment
-        table.appendChild(row);
-
-    // orderDisplay.appendChild(document.createElement("p")).innerHTML = "Date: " + dateNew;
-    // orderDisplay.appendChild(document.createElement("p")).innerHTML = "Payment status: " + paymentStatus;
-    for (let x = 0; x < itemHistory.length; x++) {
-        const item = itemHistory[x].productName;
-        const quantity = itemHistory[x].quantity;
-        // orderDisplay.appendChild(document.createElement("p")).innerHTML = "Item: " + item;
-        // orderDisplay.appendChild(document.createElement("p")).innerHTML = "Quantity: " + quantity;
+    if (orderHistory.length === 0) {
+        const orderHistory = document.getElementById('order-history');
+        const p = document.createElement('p');
+        p.textContent = 'You have no previous orders. Go to the products page to try our delicious products!';
+        orderHistory.appendChild(p);
+        return;
     }
-    itemHistory.forEach(item => {
-        let row = document.createElement("tr");
-        row.appendChild(createCell("")); // Empty cell for date
-        row.appendChild(createCell("")); // Empty cell for payment status
-        row.appendChild(createCell(item.productName));
-        row.appendChild(createCell(item.quantity));
-        table.appendChild(row);
-    });
-    orderDisplay.appendChild(table);
-        function createCell(text) {
-            let cell = document.createElement("td");
-            cell.textContent = text;
-            return cell;
-        }
-}
+    //Loop through all sessionId's in the orderHistory array, and display the order details
+    for (let i = 0; i < orderHistory.length; i++) {
+            const order = orderHistory[i];
+            const id = order.id;
+            const itemHistory = await fetch('/orders/items/' + id, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Items:', data);
+                return data;
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+            // Define all the variables that will be used to display the order details
+            const date = new Date(order.date * 1000);
+            // Format the date
+            const day = date.getDate();
+            const month = date.getMonth() + 1; // JavaScript months are 0-indexed
+            const year = date.getFullYear();
+            const dateNew = `${day}/${month}/${year}`;
 
-}
-getOrderHistory();
+            const orderTotal = order.amount_total;
+
+            //Adds a random emoji to the order line
+            const emojis = ['😀', '😃', '😄', '😁', '😆', '😊', '😇', '🙂', '😉', '😌', '😍', '🥰', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤗', '🤩', '🥳', '😎', '🤓', '🧐', '😺', '😸', '😻'];
+
+            // Function to get a random emoji
+            function getRandomEmoji() {
+            const randomIndex = Math.floor(Math.random() * emojis.length);
+            return emojis[randomIndex];
+            }
+
+            // Display the order details in a table format
+            const orderDisplay = document.getElementById("order-history");
+            let table = document.createElement("table");
+
+            // Create header row
+            let headerRow = document.createElement("tr");
+            let headers = ["Your order on " + dateNew + getRandomEmoji()];
+            headers.forEach(headerText => {
+                let header = document.createElement("th");
+                header.textContent = headerText;
+                headerRow.appendChild(header);
+            });
+            table.appendChild(headerRow);
+
+            // Create a row for each item
+            itemHistory.forEach(item => {
+                let row = document.createElement("tr");
+                row.appendChild(createCell(item.quantity + "x " + item.productName));
+                //row.appendChild(createCell(item.quantity));
+                table.appendChild(row);
+            });
+
+            // Create a row for the order total
+            let totalRow = document.createElement("tr");
+            totalRow.appendChild(createCell("Total: " + orderTotal + ",-"));
+            table.appendChild(totalRow);
+
+            // Append the table to the order display
+            orderDisplay.appendChild(table);
+
+            // Helper function to create a table cell
+            function createCell(text) {
+                let cell = document.createElement("td");
+                cell.textContent = text;
+                return cell;
+            }
+
+        }
+    }
+    //getOrderHistory();
