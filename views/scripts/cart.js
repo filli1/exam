@@ -4,31 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.checkout-button').addEventListener('click', checkout);
 });
 
-
-//Cart should only be displayed if user is logged in
-//Check if user is logged in by checking if cookie exists
-
-// async function getUser() {
-//     try {
-//         const response = await fetch("/users/checkWithCookie", {
-//             method: "GET",
-//             headers: {
-//             "Content-Type": "application/json",
-//             },
-//         });
-
-//         if (response.ok) {
-//             const data = await response.json();
-//             return data;
-//         } else {
-//             throw new Error(response.statusText);
-//         }
-//         } catch (error) {
-//         //console.error(error);
-//         return null; // Return null in case of an error
-//         }
-// }
-
+//get cart from session storage
 function getCart() {
     var cart = sessionStorage.getItem('cart');
     return cart ? JSON.parse(cart) : {};
@@ -36,6 +12,7 @@ function getCart() {
 
 let lineItems = [];
 
+//Display the items in the cart
 async function displayCart() {
     const cart = getCart();
     const numberOfDistinctProducts = Object.keys(cart).length;
@@ -56,13 +33,14 @@ async function displayCart() {
     } else {
 
         if (!user) {
+            // Disable the checkout button if the user is not logged in
             checkoutButton = document.querySelector('.checkout-button');
             checkoutButton.removeEventListener('click', checkout);
             checkoutButton.style.backgroundColor = 'grey';
             checkoutButton.style.cursor = 'not-allowed';
             checkoutButton.style.color = 'black';
 
-            // Create a tooltip message
+            //Create a tooltip message for when the user is not logged in
             const tooltip = document.createElement('span');
             tooltip.className = 'tooltip';
             tooltip.textContent = 'Create a user or log in to continue to checkout.';
@@ -75,8 +53,6 @@ async function displayCart() {
         // Create a table element
         const cartTable = document.createElement('table');
         cartOverview.appendChild(cartTable);
-
-        // Optionally, create and append a header row to the table
         const headerRow = document.createElement('tr');
         ['Image', 'Name', 'Quantity', 'Price', 'Total',''].forEach(text => {
             const th = document.createElement('th');
@@ -85,7 +61,7 @@ async function displayCart() {
         });
         cartTable.appendChild(headerRow);
 
-        // Append product rows to the table
+        // Add product rows to the table
         Object.keys(cart).forEach(productId => {
             fetch(`/products/${productId}`)
                 .then(response => response.json())
@@ -112,6 +88,7 @@ function showTooltip() {
     const tooltip = document.querySelector(".tooltip");
     tooltip.style.display = "block";
 }
+
 function hideTooltip() {
     const tooltip = document.querySelector(".tooltip");
     tooltip.style.display = "none";
@@ -147,7 +124,7 @@ function createProductElement(product, quantity) {
     const image = document.createElement('img');
     image.src = product.image;
     image.alt = product.name;
-    image.style.width = '50px'; // Adjust size as needed
+    image.style.width = '50px'; 
     image.style.height = 'auto';
     imageCell.appendChild(image);
     tr.appendChild(imageCell);
@@ -207,15 +184,15 @@ function adjustQuantity(productId, adjustment) {
 
         if (cart[productId].quantity <= 0) {
             delete cart[productId];
-            document.getElementById(`row-${productId}`).remove(); // Remove the row for this product
+            document.getElementById(`row-${productId}`).remove(); // Remove the row for this product if the quantity is 0
         } else {
             const quantityDisplay = document.getElementById(`quantity-${productId}`);
             if (quantityDisplay) {
-                quantityDisplay.textContent = cart[productId].quantity; // Update the quantity in the DOM
+                quantityDisplay.textContent = cart[productId].quantity; 
             }
             const totalPriceDisplay = document.getElementById(`total-price-${productId}`);
             if (totalPriceDisplay) {
-                totalPriceDisplay.textContent = `${(cart[productId].price * cart[productId].quantity).toFixed(2)} kr.`; // Update the total price in the DOM
+                totalPriceDisplay.textContent = `${(cart[productId].price * cart[productId].quantity).toFixed(2)} kr.`; // Update the total price 
             }
         }
 
@@ -225,7 +202,7 @@ function adjustQuantity(productId, adjustment) {
     }
 }
 
-
+// Delete a product from the cart
 function deleteItem(productId) {
     const cart = getCart();
     delete cart[productId];
@@ -233,12 +210,14 @@ function deleteItem(productId) {
     updateCartDisplay();
 }
 
+// Update the cart display
 function updateCartDisplay() {
     document.getElementById('cart-overview').innerHTML = ''; // Clear existing content
     displayCart();
     updateCartCountDisplay(); // Update the cart count
 }
 
+//Update the line items for the checkout session
 function updateLineItems() {
     const cart = getCart();
     lineItems = Object.keys(cart).map(productId => ({
@@ -247,6 +226,7 @@ function updateLineItems() {
     }));
 }
 
+//Update the cart total
 function updateCartTotal() {
     const cart = getCart();
     let total = 0;

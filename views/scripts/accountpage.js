@@ -3,13 +3,17 @@ document.addEventListener('DOMContentLoaded', () => {
     getOrderHistory();
  });
 
+//First part is for the showing and editing of the user info
 
-//Display userinfo, and allow the user to edit it
+
+        //Display userinfo, and allow the user to edit it
         //Hide the buttons that are not needed yet
-        document.getElementById("accountsavebtn").style.display = "none";
-        document.getElementById("accountpasswordconfirm").style.display = "none";
-        document.getElementById("accountcancelbtn").style.display = "none";
-        document.getElementById("confirmlabel").innerHTML = "";
+            document.getElementById("accountsavebtn").style.display = "none";
+            document.getElementById("accountpasswordconfirm").style.display = "none";
+            document.getElementById("accountcancelbtn").style.display = "none";
+            document.getElementById("confirmlabel").innerHTML = "";
+
+        //API call to get user info
         async function getUserInfo() {
             const user = await getUser();
             //Change greeting on account page
@@ -35,13 +39,14 @@ document.addEventListener('DOMContentLoaded', () => {
             //Display a new button to save the changes
             document.getElementById("accountbtn").style.display = "none";
             document.getElementById("accountsavebtn").style.display = "block";
-            //Add eventlistener to the password field; If the user clicks on it, the field will be cleared, and if the user enters a new password, a confirm new password field will appear
+            //Add eventlistener to the password field; 
+            //If the user clicks on it, the field will be cleared, and if the user enters a new password, a confirm new password field will appear
             document.getElementById("accountpassword").addEventListener("click", function() {
             document.getElementById("accountpassword").value = "";
             document.getElementById("accountpassword").type = "password";
             document.getElementById("accountpasswordconfirm").style.display = "block";
             document.getElementById("confirmlabel").innerHTML = "Confirm new password:";
-            //remove the save button until the user has confirmed the new password
+            //remove the save button until the user has confirmed the new password and they match
             document.getElementById("accountsavebtn").style.display = "none";
             //if the password and confirm password fields are not empty, and the password and confirm password fields match, the save button will reappear
             document.getElementById("accountpasswordconfirm").addEventListener("keyup", function() {
@@ -114,6 +119,50 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById("accountemail").value;
             const phone = document.getElementById("accountphone").value;
             const password = document.getElementById("accountpassword").value;
+            // Check if phone number is valid (only numbers)
+            if (!/^\+?[0-9]+$/.test(phone)) {
+                alert("Please enter a valid phone number, and include your country code");
+                return;
+            }
+            //Check if phone number is at least 8 digits
+            if (phone.length < 8) {
+                alert("Please enter a valid phone number, and include your country code");
+                return;
+            }
+            //Check if phone number is at most 15 digits
+            if (phone.length > 15) {
+                alert("Please enter a valid phone number");
+                return;
+            }
+            //Check for password requirements
+            if (password.length < 8) {
+                alert("Password must be at least 8 characters");
+                return;
+              }
+            
+              if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+              }
+            
+              if (!/[A-Z]/.test(password)) {
+                alert("Password must contain at least one uppercase letter");
+                return;
+              }
+            
+              if (!/[a-z]/.test(password)) {
+                alert("Password must contain at least one lowercase letter");
+                return;
+              }
+            
+              if (!/[0-9]/.test(password)) {
+                alert("Password must contain at least one number");
+                return;
+              }
+              
+            
+  
+  
             //Update the user info
             updateUser(name, email, phone, password);
             //Lock the fields again
@@ -133,9 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             
-
-        
-
 
 
 //Next part displays the user's order history, by using the retrieveSessions controller. 
@@ -190,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const orderTotal = order.amount_total;
 
-            //Adds a random emoji to the order line
+            //Adds a random emoji to the order line to make it more fun
             const emojis = ['😀', '😃', '😄', '😁', '😆', '😊', '😇', '🙂', '😉', '😌', '😍', '🥰', '😗', '😙', '😚', '😋', '😛', '😝', '😜', '🤪', '🤗', '🤩', '🥳', '😎', '🤓', '🧐', '😺', '😸', '😻'];
 
             // Function to get a random emoji
@@ -217,7 +263,6 @@ document.addEventListener('DOMContentLoaded', () => {
             itemHistory.forEach(item => {
                 let row = document.createElement("tr");
                 row.appendChild(createCell(item.quantity + "x " + item.productName));
-                //row.appendChild(createCell(item.quantity));
                 table.appendChild(row);
             });
 
@@ -226,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
             totalRow.appendChild(createCell("Total: " + orderTotal + ",-"));
             table.appendChild(totalRow);
 
-            // Append the table to the order display
             orderDisplay.appendChild(table);
 
             // Helper function to create a table cell

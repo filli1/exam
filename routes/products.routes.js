@@ -1,6 +1,6 @@
+//Define all routes for the products controller
 const express = require("express");
 const router = express.Router();
-
 const products = require("../controllers/products.controllers");
 
 router.post("/new", (req, res) => {

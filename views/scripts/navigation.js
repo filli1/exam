@@ -1,8 +1,11 @@
+//Script for navigation bar
+
 function deleteCookie(name) {
   // Set the cookie to expire by setting the expiration date to a date in the past
   document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
 }
 
+//Gets user from the cookie
 async function getUser() {
   try {
     const response = await fetch("/users/checkWithCookie", {
@@ -11,7 +14,6 @@ async function getUser() {
         "Content-Type": "application/json",
       },
     });
-
     if (response.ok) {
       const data = await response.json();
       return data;
@@ -19,16 +21,15 @@ async function getUser() {
       throw new Error(response.statusText);
     }
   } catch (error) {
-    //console.error(error);
-    return null; // Return null in case of an error
+    return null; 
   }
 }
 
 async function updateUserNav() {
   const user = await getUser();
   if (user) {
-    // User is logged in
-    // Change the log in button to a log out button
+    //User is logged in
+    //Change the log in button to a log out button
     //Change the create user link to the user's name
     const loginLink = document.getElementById("open-popup");
     if (loginLink) {
@@ -46,7 +47,7 @@ async function updateUserNav() {
     }
   } else {
     // User is not logged in
-    // Hide or remove the Log out button
+    // remove the Log out button
     const logoutLink = document.getElementById("open-popup");
     if (logoutLink) {
       logoutLink.innerHTML = "Login";
@@ -76,6 +77,7 @@ async function updateUserNav() {
     }
     // Add the Create User link
     //er det denne der bliver brugt eller den der ligger i html?
+    //det er begge, den er også her for at sørge for at create user linket kommer tilbage hvis brugeren logger ud, og den i html sørger for at det er der fra starten af
     const createUserLink =
       '<a id="createuserlink" href="/create-user">Create User</a>';
     nav.insertAdjacentHTML("beforeend", createUserLink);

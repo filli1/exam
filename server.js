@@ -1,3 +1,4 @@
+//Server setup
 require('dotenv').config();
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -14,7 +15,6 @@ app.set('view engine', 'ejs');
 
 app.use(cookieParser());
 
-// Enable CORS for all routes
 app.use(cors());
 
 app.get('/', (req, res) => {

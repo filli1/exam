@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const usersController = require('./users.controllers');
 const port = 3000;
 
+//Used to get all orders for a user from the database. Uses the userAuth cookie to do so.
 exports.retrieveSessions = async (req, res) => {
     const userAuth = JSON.parse(req.cookies.userAuth);
     try {
@@ -31,6 +32,7 @@ exports.retrieveSessions = async (req, res) => {
     }
 }
 
+//Used to get all items/products in a session with the session ID.
 exports.getItemsInSession = async (req, res) => {
     const session = {
         id: req.params.sessionId
@@ -52,6 +54,7 @@ exports.getItemsInSession = async (req, res) => {
 
 }
 
+//Used to get all items/products in a session from the session ID.
 exports.retrieveSessionLineItems = async (session) => {
     const lineItems = await stripe.checkout.sessions.listLineItems(
         session.id,
@@ -59,14 +62,13 @@ exports.retrieveSessionLineItems = async (session) => {
     return lineItems;
 }
 
-
+//Creates a Stripe checkout session
 exports.createCheckoutSession = async (req, res) => {
     const userAuth = JSON.parse(req.cookies.userAuth);
     const origin = req.headers.origin
 
     try {
         const user = await usersController.getUser(userAuth.id);
-
         const session = await stripe.checkout.sessions.create({
             line_items: req.body,
             mode: 'payment',
@@ -82,8 +84,6 @@ exports.createCheckoutSession = async (req, res) => {
             success_url: `${origin}/orders/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${origin}/cart`,
         });
-
-        // Send the session URL in a JSON response
         res.json({ url: session.url });
     } catch (err) {
         console.error(err.message);
@@ -91,6 +91,7 @@ exports.createCheckoutSession = async (req, res) => {
     }
 };
 
+//Sets up the transporter used to send emails to users
 const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -99,6 +100,7 @@ const transporter = nodemailer.createTransport({
     },
   });
 
+//Function to send email to user using the transporter
 async function mailToUser(subject, text, html, recipients = []) {
     const info = await transporter.sendMail({
         from: "JOE <cbsdisex@gmail.com>", // sender address
@@ -108,7 +110,7 @@ async function mailToUser(subject, text, html, recipients = []) {
         html: html, // html body
     });
 }
-
+//Creates the HTML body for the email
 function createItemHtml(item) {
     return `
         <tr>
@@ -119,8 +121,7 @@ function createItemHtml(item) {
     `;
 }
 
-
-//Validate the session and create the order in the database
+//Check if the session is paid and order created successfully. If so, send email to user and redirect to success page and send SMS in 2 minutes, and send the order to the database.
 exports.successOrder = async (req, res) => {
     try {
         const sessionId = req.query.session_id;
@@ -133,7 +134,7 @@ exports.successOrder = async (req, res) => {
         const name = session.customer_details.name;
         const phone = session.customer_details.phone;
         
-        // Check if the session is paid (you might want to check other statuses as well)
+        // Check if the session is paid
         if (session.payment_status === 'paid') {
             // get the line items from the session
             const lineItems = await exports.retrieveSessionLineItems(session);
@@ -191,7 +192,7 @@ exports.successOrder = async (req, res) => {
     }
 }
 
-//This function uses the twilio package to send an SMS to the user
+//This function uses the twilio package to send an SMS to the user 
 function sendSMS(phoneNumber, name) {
     const accountSid = process.env.TWILIO_ACCOUNT_SID;
     const authToken = process.env.TWILIO_AUTH_TOKEN;

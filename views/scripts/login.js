@@ -17,11 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
           body: JSON.stringify({ email, password }),
         });
         
-        const responseText = await response.text(); // Await the response content
+        const responseText = await response.text(); 
         function showAlert(message) {
             alert(message);
         }
-        // Handle the response
         if (response.ok) {
             //refresh page
             location.reload();

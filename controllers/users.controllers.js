@@ -5,6 +5,7 @@ const dbPath = path.resolve(__dirname, '../data/joe.db');
 const objectHash = require('object-hash'); //Used to hash passwords https://www.npmjs.com/package/object-hash
 const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 
+//Hashes the password using the objectHash library. The password is hashed using the RSA-SHA512 algorithm.
 function hashPassword(string) {
     if (!string || string === "xxxxxxxx") {
         return null;
@@ -13,6 +14,7 @@ function hashPassword(string) {
     return hashedString;
 }
 
+//Creates a user in the database and creates a customer in Stripe with the same information.
 exports.createUser = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
@@ -43,11 +45,6 @@ exports.createUser = async (req, res) => {
             id: userId,
             stripeID: customerStripeID,
         }
-
-        // res.cookie("userAuth", JSON.stringify(cookie), {
-        //     maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
-        // })
-        // res.cookie("userAuth", cookie).send(`User created successfully with id ${userId}`);
         res.status(200).cookie("userAuth", JSON.stringify(cookie), {
             maxAge: 1000 * 60 * 60 * 24 * 7 //7 days
           }).send(`User created successfully with id ${userId}`);
@@ -59,12 +56,13 @@ exports.createUser = async (req, res) => {
     }
 }
 
+//Get a single user from the database from the user ID
 exports.getUser = (id) => {
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(dbPath);
 
         db.get(`SELECT * FROM users WHERE id=?`, [id], (err, row) => {
-            db.close(); // Close the database connection here
+            db.close(); 
 
             if (err) {
                 reject(err);
@@ -72,17 +70,17 @@ exports.getUser = (id) => {
                 resolve(row);
             }
         });
-
-        //db.close();
     });
 }
 
+//Check if a user exists in the database from the email. Used to make sure that a user can't create multiple accounts with the same email.
+//Doesn't actually return the user info, just returns true or false.
 exports.checkUserByEmail = (req, res) => {
     const email = req.body.email; 
 
     const db = new sqlite3.Database(dbPath);
     db.get(`SELECT * FROM users WHERE email=?`, [email], (err, row) => {
-        db.close(); // Close the database connection
+        db.close();
 
         if (err) {
             res.status(500).send("Database error");
@@ -96,11 +94,12 @@ exports.checkUserByEmail = (req, res) => {
     });
 };
 
+//Get a single user from the database from the email
 exports.getUserByEmail = (email) => {
     return new Promise((resolve, reject) => {
         const db = new sqlite3.Database(dbPath);
         db.get(`SELECT * FROM users WHERE email=?`, [email], (err, row) => {
-            db.close(); // Close the database connection here
+            db.close(); 
 
             if (err) {
                 reject(err);
@@ -111,6 +110,7 @@ exports.getUserByEmail = (email) => {
     });
 };
 
+//Gets userinfo from the ID
 exports.getUserReq = (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
@@ -126,6 +126,7 @@ exports.getUserReq = (req, res) => {
     db.close();
 }
 
+//Used to update a user in the database. Also updates the user in Stripe with the same information.
 exports.editUser = (req, res) => {
     const db = new sqlite3.Database(dbPath);
     const userInfo = {
@@ -191,6 +192,7 @@ exports.editUser = (req, res) => {
     db.close();
 }
 
+//Used to delete a user from the database. Also deletes the user from Stripe. Not directly implemented in the website, but allows for the possibility of deleting users.
 exports.deleteUser = async (req, res) => {
     const id = req.params.id;
 
@@ -222,7 +224,8 @@ exports.deleteUser = async (req, res) => {
 
 }
 
-//Functions both for middleware and endpoints
+
+//Used to check if a user is logged in, since the userAuth cookie is set when a user logs in.
 exports.getUserByCookie = async (req, res, next) => {
     
     if (!req.cookies.userAuth) {
@@ -262,6 +265,7 @@ exports.getUserByCookie = async (req, res, next) => {
     }
 }
 
+//Used to log a user in. Sets the userAuth cookie with the user ID and the Stripe customer ID.
 exports.login = async (req, res) => {
     const email = req.body.email;
     const password = hashPassword(req.body.password);

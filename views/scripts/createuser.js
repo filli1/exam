@@ -1,6 +1,7 @@
 const submitbtn = document.getElementById("create-user-btn");
 
-//function to check if email is already in use, will be used later. If the email already exists, the user will be notified and the function will return false. If the email does not exist, the function will return true.
+//function to check if email is already in use, will be used later. If the email already exists, the user will be notified and the function will return false. 
+//If the email does not exist, the function will return true.
 async function checkEmail(email) {
   try {
     const response = await fetch("/users/check", {
@@ -12,17 +13,18 @@ async function checkEmail(email) {
     });
     if (response.ok) {
       const data = await response.json();
-      return data.exists; // Directly return the existence check
+      return data.exists; 
     } else {
       throw new Error(response.statusText);
     }
   } catch (error) {
     console.error(error);
-    return null; // Return null in case of an error
+    return null; 
   }
 }
 
-//Set password field to password on focus. Done to prevent safari strong password feature from blocking the users ability to choose their own password.
+//Set password field to password on focus. 
+//Done to prevent safari strong password feature from blocking the users ability to choose their own password, which occured in some instances when the password field was set to password by default.
 document.getElementById('create-password').addEventListener('focus', function() {
   document.getElementById('create-password').type = 'password';
 });
@@ -42,8 +44,6 @@ function checkPassword() {
   const uppercaseIcon = document.getElementById("uppercase-icon");
   const lowercaseIcon = document.getElementById("lowercase-icon");
   const numberIcon = document.getElementById("number-icon");
-  const name = document.getElementById("create-name").value;
-  const email = document.getElementById("create-email").value;
 
   // Check password length
   if (password.length >= 8) {
@@ -94,7 +94,7 @@ function checkPassword() {
   }
 }
 
-// Listen for input events on password fields and trigger real-time validation
+// Listen for input events on password fields and call checkPassword so requirement fulfillment is checked in real time
 const passwordInput = document.getElementById("create-password");
 const confirmPasswordInput = document.getElementById("create-password-confirm");
 const lengthIcon = document.getElementById("length-icon");
@@ -105,53 +105,55 @@ confirmPasswordInput.addEventListener("input", checkPassword);
 // Initialize the requirement check
 checkPassword();
 
-async function createUser() {
-  const name = document.getElementById("create-name").value;
-  const password = document.getElementById("create-password").value;
-  const email = document.getElementById("create-email").value;
-  const phone = document.getElementById("create-phone").value;
-  const confirmPassword = document.getElementById(
-    "create-password-confirm"
-  ).value;
+// Function to create a user
+  async function createUser() {
+    const name = document.getElementById("create-name").value;
+    const password = document.getElementById("create-password").value;
+    const email = document.getElementById("create-email").value;
+    const phone = document.getElementById("create-phone").value;
+    const confirmPassword = document.getElementById(
+      "create-password-confirm"
+    ).value;
+    
+    // Check if email already exists, if so, return and show alert
+    const emailExists = await checkEmail(email);
+    if (emailExists === 1) {
+      alert("Email already in use");
+      return;
+    } else if (emailExists === null) {
+      alert("Error checking email. Please try again.");
+      return;
+    }
 
-  const emailExists = await checkEmail(email);
-  if (emailExists === 1) {
-    showAlert("Email already in use");
-    return;
-  } else if (emailExists === null) {
-    showAlert("Error checking email. Please try again.");
-    return;
-  }
+    // Check if email is valid by checking if it at least contains @ and .
+    if (!email.includes("@") || !email.includes(".")) {
+      alert("Please enter a valid email");
+      return;
+    }
 
-  // Check if email is valid
-  if (!email.includes("@") || !email.includes(".")) {
-    showAlert("Please enter a valid email");
-    return;
-  }
+    // Check if phone number is valid (only numbers and + allowed)
+    if (!/^\+?[0-9]+$/.test(phone)) {
+      alert("Please enter a valid phone number");
+      return;
+    }
 
-  // Check if phone number is valid (only numbers)
-  if (!/^\+?[0-9]+$/.test(phone)) {
-    showAlert("Please enter a valid phone number");
-    return;
-  }
+    // Check if phone number includes country code by checking if it includes +
+    if (!phone.includes("+")) {
+      alert("Please include country code in phone number");
+      return;
+    }
 
-  // Check if phone number includes country code
-  if (!phone.includes("+")) {
-    showAlert("Please include country code in phone number");
-    return;
-  }
+    //Check if phone number is at least 8 digits
+    if (phone.length < 8) {
+      alert("Please enter a valid phone number");
+      return;
+    }
 
-  //Check if phone number is at least 8 digits
-  if (phone.length < 8) {
-    showAlert("Please enter a valid phone number");
-    return;
-  }
-
-  //Check if phone number is at most 15 digits
-  if (phone.length > 15) {
-    showAlert("Please enter a valid phone number");
-    return;
-  }
+    //Check if phone number is at most 15 digits
+    if (phone.length > 15) {
+      alert("Please enter a valid phone number");
+      return;
+    }
 
   // Check for empty fields
   if (
@@ -161,33 +163,33 @@ async function createUser() {
     phone === "" ||
     confirmPassword === ""
   ) {
-    showAlert("Please fill out all fields");
+    alert("Please fill out all fields");
     return;
   }
 
   // Check password requirements
   if (password.length < 8) {
-    showAlert("Password must be at least 8 characters");
+    alert("Password must be at least 8 characters");
     return;
   }
 
   if (password !== confirmPassword) {
-    showAlert("Passwords do not match");
+    alert("Passwords do not match");
     return;
   }
 
   if (!/[A-Z]/.test(password)) {
-    showAlert("Password must contain at least one uppercase letter");
+    alert("Password must contain at least one uppercase letter");
     return;
   }
 
   if (!/[a-z]/.test(password)) {
-    showAlert("Password must contain at least one lowercase letter");
+    alert("Password must contain at least one lowercase letter");
     return;
   }
 
   if (!/[0-9]/.test(password)) {
-    showAlert("Password must contain at least one number");
+    alert("Password must contain at least one number");
     return;
   }
 
@@ -213,17 +215,14 @@ async function createUser() {
     })
     .catch((error) => {
       console.error("Fetch error:", error);
-      showAlert("An error occurred while fetching data from the server.");
+      alert("An error occurred while fetching data from the server.");
     });
 
-        //   wait 2 seconds before redirecting to index.html
-        setTimeout(function() {
-            window.location.href = '/';
+        //Redirect to home page if user is created successfully after 2 seconds. If redirected imediattely, the cookie doesnt always have time do be set, therefore the timeout.
+        setTimeout(() => {
+          window.location.href = '/';
         }, 2000);
-}
-
-function showAlert(message) {
-  alert(message);
+          
 }
 
 submitbtn.addEventListener("click", createUser);

@@ -1,14 +1,12 @@
+/* General styling */
 html{
     scroll-behavior: smooth;
 }
+
 body{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0;
     background-color: #f8f8f6;
-}
-
-body#frontpage{
-  background-color: rgba(37, 40, 43, 1);
 }
 
 p {
@@ -20,7 +18,112 @@ p {
     margin-left: 50px;
 }
 
-/*Navigation*/
+label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+form {
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+.input {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+input[type="submit"] {
+  background-color: rgba(247, 193, 217, 1);
+  cursor: pointer;
+  color: black;
+  font-weight: 700;
+  border: none;
+}
+
+p.pink-text{
+text-align: center;
+ color: rgb(205, 145, 172);
+ cursor: pointer;
+ text-decoration: underline;
+
+}
+p.pink-text:hover{
+   color: rgb(149, 93, 118);
+  }
+
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 16px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+
+}
+
+/* Buttons */
+.button{
+  background-color: rgba(247, 193, 217, 1);
+  padding: 20px 20px;
+  cursor:pointer
+  
+}
+
+.pink-btn{
+width: 200px;
+border: none;
+background-color: rgba(247, 193, 217, 1); 
+font-weight: 700;
+padding: 15px 0px;
+}
+
+.pink-btn:hover{
+background-color: rgb(213, 156, 182); 
+}
+
+
+/*Navigation bar*/
 nav{
     /* background-color: rgba(247, 193, 217, 1); */
     background-color: white;
@@ -82,101 +185,82 @@ img#header-logo {
 position: relative;
 left: 55%;
 }
-/* Button */
-.button{
-    background-color: rgba(247, 193, 217, 1);
-    padding: 20px 20px;
-    cursor:pointer
-    
-}
-
-.pink-btn{
-width: 200px;
-border: none;
-background-color: rgba(247, 193, 217, 1); 
-font-weight: 700;
-padding: 15px 0px;
-}
-
-.pink-btn:hover{
-  background-color: rgb(213, 156, 182); 
-}
 
 /*Home page*/
 #home {
-    background-image: url('../img/background-img.jpg');
-    background-position: center center;
-    padding: 30px;
-    display: flex;
-    justify-content: center; 
-    align-items: center;
-    height: 50vh;
-  }
-  
-  #home h1, #home p {
-    text-align: center;
-    color: white;
-  }
-  
-  #home h1 {
-    font-size: 40px;
-  }
-  
-  #home-content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
-  
-  .home-btn {
-    width: 200px;
-    border: none;
-    background-color: rgba(247, 193, 217, 1); 
-    font-weight: 700;
-    padding: 15px 0px;
-  }
+  background-image: url('../img/background-img.jpg');
+  background-position: center center;
+  padding: 30px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: 50vh;
+}
 
-  .home-btn:hover{
-    background-color: rgb(213, 156, 182); 
-  }
+#home h1, #home p {
+  text-align: center;
+  color: white;
+}
 
+#home h1 {
+  font-size: 40px;
+}
 
+#home-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.home-btn {
+  width: 200px;
+  border: none;
+  background-color: rgba(247, 193, 217, 1); 
+  font-weight: 700;
+  padding: 15px 0px;
+}
+
+.home-btn:hover{
+  background-color: rgb(213, 156, 182); 
+}
+
+body#frontpage{
+  background-color: rgba(37, 40, 43, 1);
+}
 
 .overlay {
-    position: relative;
-  }
-  
-  .overlay::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.694); /* Black with 50% opacity */
-    z-index: 1; /* Place the overlay on top of the content */
-  }
- 
-  /* Top banner styling */
-  .top-banner{
-    background-color: rgba(247, 193, 217, 1);
-    padding: 30px;
-    text-align: center;
-    font-size: 20px;
-    text-transform: uppercase;
-  }
+  position: relative;
+}
 
+.overlay::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.694); 
+  z-index: 1; 
+}
 
+/* Top banner styling */
+.top-banner{
+  background-color: rgba(247, 193, 217, 1);
+  padding: 30px;
+  text-align: center;
+  font-size: 20px;
+  text-transform: uppercase;
+}
 
-  /*Products on frontpage*/
-  #frontpage-products{
-    margin: 50px 0px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+/*Products on frontpage*/
+#frontpage-products{
+  margin: 50px 0px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 
 #frontpage-products h1{
   text-align: center;
@@ -250,46 +334,14 @@ padding: 15px 0px;
    
   }
 
-/*Login page styling*/
 
+/*Login form/popup styling*/
 
-/* Style the form container */
 #login-form {
   max-width: 300px;
   margin: 0 auto;
 }
 
-/* Style the form labels and inputs */
-label {
-  display: block;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 16px;
-}
-
-/* Style the submit button */
-input[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-
-}
-
-
-/* Style the background overlay */
 .popup {
   display: none;
   position: fixed;
@@ -301,7 +353,6 @@ input[type="submit"] {
   z-index: 1000;
 }
 
-/* Style the popup container */
 .popup-content {
   position: absolute;
   top: 50%;
@@ -316,7 +367,6 @@ input[type="submit"] {
   text-align: center;
 }
 
-/* Style the close button */
 .close {
   position: absolute;
   top: 10px;
@@ -325,57 +375,7 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-/* Style the form and form elements */
-h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-form {
-  text-align: left;
-}
-
-label {
-  display: block;
-  margin: 10px 0;
-  font-weight: bold;
-}
-
-input[type="text"],
-input[type="password"],
-input[type="submit"] {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 16px;
-}
-
-input[type="submit"] {
-  background-color: rgba(247, 193, 217, 1);
-  cursor: pointer;
-  color: black;
-  font-weight: 700;
-  border: none;
-}
-
-p.pink-text{
-text-align: center;
- color: rgb(205, 145, 172);
- cursor: pointer;
- text-decoration: underline;
-
-}
-p.pink-text:hover{
-   color: rgb(149, 93, 118);
-  }
-
-  /*My account page*/
-  #account-page{
-    background-color: #f8f8f6;
-  }
-
+/*cart styling*/
   .add-to-cart-btn {
     background-color: rgba(247, 193, 217, 1); /* Pink background */
     color: black; /* Black text */
@@ -452,17 +452,7 @@ td button:hover {
   background-color: rgba(247, 193, 217, 0.8); /* Slightly transparent on hover */
 }
 
-
-.input {
-  width: 100%;
-  padding: 10px;
-  margin: 5px 0;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  font-size: 16px;
-
-}
-
+/*create user page*/
 #create-user{
   display: flex;
   flex-direction: column;
@@ -544,7 +534,7 @@ td button:hover {
   background-repeat: no-repeat;
   background-attachment:scroll;
   height: 100vh;
-
+  background-color: #f8f8f6;
 }
 
 #account-info{

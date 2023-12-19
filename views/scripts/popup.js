@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Create the popup HTML and add it to the page
+  // Creates the popup HTML for the login popup
   const popupHTML = `
     <div id="login-popup" class="popup">
       <div class="popup-content">

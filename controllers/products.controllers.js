@@ -4,7 +4,7 @@ const path = require('path');
 const dbPath = path.resolve(__dirname, '../data/joe.db');
 const stripe = require('stripe')(process.env.STRIPE_TEST_TOKEN);
 
-
+//Add a product to the database to be displayed on the website
 exports.addProduct = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
@@ -28,7 +28,7 @@ exports.addProduct = async (req, res) => {
     db.close();
 }
 
-
+//Function that can be used to delete a product from the database - not directly implemented in the website.
 exports.deleteProduct = async (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
@@ -44,6 +44,7 @@ exports.deleteProduct = async (req, res) => {
     db.close();
 }
 
+//Get a single product from the database from the product ID
 exports.getoneProduct = (req, res) => {
     const db = new sqlite3.Database(dbPath);
 
@@ -59,6 +60,7 @@ exports.getoneProduct = (req, res) => {
     db.close();
 }
 
+//Get all products from the database - used to display all products on the website
 exports.getAllProducts = (req, res) => {
     const db = new sqlite3.Database(dbPath);
 

@@ -1,6 +1,6 @@
+//Define all routes for the users controller
 const express = require("express");
 const router = express.Router();
-
 const users = require("../controllers/users.controllers");
 
 router.get("/f/:id", (req, res) => {

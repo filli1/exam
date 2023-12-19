@@ -33,8 +33,7 @@ function addProductElement(product) {
     var button = document.createElement("button");
     button.className = "add-to-cart-btn";
     button.textContent = "Add to Cart";
-    
-    // Attach an event listener to the button
+
     button.addEventListener("click", function() {
         addToCartFunction(product);
     });
