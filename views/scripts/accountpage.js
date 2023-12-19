@@ -119,6 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById("accountemail").value;
             const phone = document.getElementById("accountphone").value;
             const password = document.getElementById("accountpassword").value;
+            const confirmPassword = document.getElementById("accountpasswordconfirm").value;
             // Check if phone number is valid (only numbers)
             if (!/^\+?[0-9]+$/.test(phone)) {
                 alert("Please enter a valid phone number, and include your country code");
