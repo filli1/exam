@@ -3,18 +3,6 @@
 [![Contributors][contributors-shield]][contributors-url]
 [![Issues][issues-shield]][issues-url]
 
-<style>
-  .rounded-button {
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 20px;
-    background-color: rgba(247, 193, 217, 1);
-    text-decoration: none; /* Remove underline */
-    color: #fff; /* Text color */
-  }
-</style>
-
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
